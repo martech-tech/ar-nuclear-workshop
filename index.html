@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#0b2447">
+  <title>โรงไฟฟ้านิวเคลียร์ AR — Workshop วิทยาศาสตร์</title>
+  <script src="libs/aframe.min.js"></script>
+  <script src="libs/aframe-ar.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/plant-model.js"></script>
+  <link rel="stylesheet" href="css/ui.css">
+</head>
+<body>
+
+  <!-- หน้าจอเริ่มต้น -->
+  <div id="splash">
+    <div class="atom">⚛️</div>
+    <h1>โรงไฟฟ้านิวเคลียร์ AR</h1>
+    <p class="tagline">Workshop วิทยาศาสตร์ · พลังงานสะอาด</p>
+    <p>1. อนุญาตให้ใช้กล้องเมื่อเบราว์เซอร์ถาม แล้วกด "เริ่มสำรวจ"<br>
+       2. เล็งกล้องไปที่ <b>รูปมาร์กเกอร์</b> บนกระดาษ<br>
+       3. เดินรอบๆ โรงไฟฟ้า กด 📖 เรียนรู้ แล้วท้าควิซ!</p>
+    <button id="startBtn" disabled>กำลังโหลด...</button>
+    <p class="alt-link">ไม่มีแผ่นมาร์กเกอร์? <a href="viewer.html">เปิดโหมด 3D ธรรมดา 🖥️</a></p>
+  </div>
+
+  <!-- คำใบ้ -->
+  <div id="hint">📷 เล็งกล้องไปที่รูปมาร์กเกอร์บนกระดาษ...</div>
+
+  <!-- แถบปุ่มควบคุม -->
+  <div id="controls">
+    <div class="row">
+      <button id="btnLearn" class="pill">📖 เรียนรู้</button>
+      <button id="btnQuiz" class="pill">❓ ควิซทดสอบ</button>
+    </div>
+    <div class="row">
+      <button id="btnEnergy" class="circle" title="เม็ดพลังงาน">⚡</button>
+      <button id="btnCutaway" class="circle" title="ส่องข้างในเตาปฏิกรณ์">🔍</button>
+      <button id="btnShrink" class="circle" title="ย่อ">➖</button>
+      <button id="btnGrow" class="circle" title="ขยาย">➕</button>
+      <button id="btnRotate" class="circle" title="หมุน">↻</button>
+    </div>
+  </div>
+
+  <!-- แผงโหมดเรียนรู้ -->
+  <div id="learnPanel">
+    <div class="card">
+      <button id="learnClose">✕</button>
+      <div class="head">
+        <span id="learnIcon">🏭</span>
+        <p id="learnTitle"></p>
+      </div>
+      <p id="learnText"></p>
+      <div id="learnNav">
+        <button id="learnPrev">◀ ก่อนหน้า</button>
+        <div id="learnDots"></div>
+        <button id="learnNext">ถัดไป ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- แผงควิซ -->
+  <div id="quizPanel">
+    <div class="card">
+      <button id="quizCloseX">✕</button>
+      <div id="quizBody">
+        <div id="quizProgress"></div>
+        <div id="quizQuestion"></div>
+        <div id="quizChoices"></div>
+        <div id="quizFeedback"></div>
+        <button id="quizNext"></button>
+      </div>
+      <div id="quizResult">
+        <div id="quizStars"></div>
+        <div id="quizScoreText"></div>
+        <div id="quizMsg"></div>
+        <button id="quizRetry">เล่นอีกครั้ง 🔄</button>
+        <button id="quizClose">ปิด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ฉาก AR ===== -->
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="logarithmicDepthBuffer: true; precision: medium"
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono;">
+
+    <a-marker id="marker" preset="hiro" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
+      <a-entity id="plant" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script src="js/ui.js"></script>
+  <script>
+    injectPlant('#plant');
+    PlantUI.init({ arMode: true });
+
+    var splash = document.getElementById('splash');
+    var startBtn = document.getElementById('startBtn');
+    var scene = document.querySelector('a-scene');
+
+    function enableStart() {
+      startBtn.disabled = false;
+      startBtn.textContent = 'เริ่มสำรวจ 🚀';
+    }
+    if (scene.hasLoaded) enableStart();
+    else scene.addEventListener('loaded', enableStart);
+    // กันเหตุกล้องช้า: เปิดปุ่มหลัง 6 วินาทีแม้ scene ยังโหลดไม่จบ
+    setTimeout(enableStart, 6000);
+
+    startBtn.addEventListener('click', function () {
+      splash.style.display = 'none';
+      document.getElementById('hint').style.display = 'block';
+      document.getElementById('controls').style.display = 'flex';
+    });
+  </script>
+</body>
+</html>

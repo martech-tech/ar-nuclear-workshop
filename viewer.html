@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#0b2447">
+  <title>โรงไฟฟ้านิวเคลียร์ 3D — Workshop วิทยาศาสตร์</title>
+  <script src="libs/aframe.min.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/plant-model.js"></script>
+  <link rel="stylesheet" href="css/ui.css">
+  <style>
+    /* ป้ายบอกวิธีใช้ มุมบน */
+    #dragTip {
+      position: fixed; top: 12px; left: 12px;
+      z-index: 400; background: rgba(11,36,71,.8); color: #fff;
+      padding: 8px 16px; border-radius: 22px; font-size: .85rem;
+      max-width: calc(100vw - 140px); line-height: 1.5;
+    }
+    #arLink {
+      position: fixed; top: 12px; right: 12px; z-index: 400;
+      background: rgba(255,255,255,.92); color: #0b2447; text-decoration: none;
+      padding: 8px 14px; border-radius: 22px; font-size: .85rem; font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="dragTip">🖐️ ลากเพื่อหมุน · บีบนิ้ว/ลูกกลิ้งเพื่อซูม</div>
+  <a href="index.html" id="arLink">📷 โหมด AR</a>
+
+  <!-- แถบปุ่มควบคุม (ชุดเดียวกับหน้า AR) -->
+  <div id="controls" style="display: flex;">
+    <div class="row">
+      <button id="btnLearn" class="pill">📖 เรียนรู้</button>
+      <button id="btnQuiz" class="pill">❓ ควิซทดสอบ</button>
+    </div>
+    <div class="row">
+      <button id="btnEnergy" class="circle" title="เม็ดพลังงาน">⚡</button>
+      <button id="btnCutaway" class="circle" title="ส่องข้างในเตาปฏิกรณ์">🔍</button>
+      <button id="btnShrink" class="circle" title="ย่อ">➖</button>
+      <button id="btnGrow" class="circle" title="ขยาย">➕</button>
+      <button id="btnRotate" class="circle" title="หมุน">↻</button>
+    </div>
+  </div>
+
+  <!-- แผงโหมดเรียนรู้ -->
+  <div id="learnPanel">
+    <div class="card">
+      <button id="learnClose">✕</button>
+      <div class="head">
+        <span id="learnIcon">🏭</span>
+        <p id="learnTitle"></p>
+      </div>
+      <p id="learnText"></p>
+      <div id="learnNav">
+        <button id="learnPrev">◀ ก่อนหน้า</button>
+        <div id="learnDots"></div>
+        <button id="learnNext">ถัดไป ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- แผงควิซ -->
+  <div id="quizPanel">
+    <div class="card">
+      <button id="quizCloseX">✕</button>
+      <div id="quizBody">
+        <div id="quizProgress"></div>
+        <div id="quizQuestion"></div>
+        <div id="quizChoices"></div>
+        <div id="quizFeedback"></div>
+        <button id="quizNext"></button>
+      </div>
+      <div id="quizResult">
+        <div id="quizStars"></div>
+        <div id="quizScoreText"></div>
+        <div id="quizMsg"></div>
+        <button id="quizRetry">เล่นอีกครั้ง 🔄</button>
+        <button id="quizClose">ปิด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ฉาก 3D ===== -->
+  <a-scene vr-mode-ui="enabled: false" renderer="colorManagement: true"
+           fog="type: linear; color: #cfe6f5; near: 4.5; far: 9">
+    <a-sky color="#bfe0f5"></a-sky>
+    <a-circle position="0 -0.002 0" rotation="-90 0 0" radius="8" color="#6aa953"></a-circle>
+
+    <a-entity id="plant" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-entity>
+
+    <a-entity camera="fov: 55" simple-orbit="target: 0 0.32 0; distance: 3.1" look-controls="enabled: false" wasd-controls="enabled: false"></a-entity>
+  </a-scene>
+
+  <script src="js/ui.js"></script>
+  <script>
+    injectPlant('#plant');
+    PlantUI.init({ arMode: false });
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+/* UI ร่วมระหว่าง index.html (AR) และ viewer.html (3D) */
+
+html, body {
+  margin: 0; padding: 0; overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== หน้าจอเริ่มต้น ===== */
+#splash {
+  position: fixed; inset: 0; z-index: 999;
+  background: linear-gradient(160deg, #0b2447 0%, #19376d 55%, #146c94 100%);
+  color: #fff; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding: 24px;
+}
+#splash .atom { font-size: 4.2rem; animation: spin 7s linear infinite; filter: drop-shadow(0 0 18px rgba(255,217,61,.55)); }
+@keyframes spin { to { transform: rotate(360deg); } }
+#splash h1 { font-size: 1.65rem; margin: 10px 0 4px; }
+#splash .tagline { color: #ffd93d; font-weight: bold; margin: 0 0 14px; font-size: .95rem; }
+#splash p { font-size: .98rem; line-height: 1.8; max-width: 350px; opacity: .93; margin: 0; }
+#startBtn {
+  margin-top: 20px; padding: 14px 44px; font-size: 1.15rem; font-weight: bold;
+  color: #0b2447; background: #ffd93d; border: none; border-radius: 40px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4); cursor: pointer;
+}
+#startBtn:disabled { opacity: .6; }
+#startBtn:active { transform: scale(.96); }
+#splash .alt-link { margin-top: 16px; font-size: .88rem; }
+#splash .alt-link a { color: #9fd0ff; }
+
+/* ===== คำใบ้ ===== */
+#hint {
+  position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+  z-index: 500; background: rgba(11,36,71,.87); color: #fff;
+  padding: 10px 18px; border-radius: 24px; font-size: .92rem;
+  display: none; white-space: nowrap; box-shadow: 0 2px 10px rgba(0,0,0,.3);
+}
+
+/* ===== แถบปุ่มควบคุม ===== */
+#controls {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  z-index: 500; display: none; flex-direction: column; align-items: center; gap: 9px;
+}
+#controls .row { display: flex; gap: 9px; }
+#controls button {
+  border: none; box-shadow: 0 3px 10px rgba(0,0,0,.35); cursor: pointer;
+  background: rgba(255,255,255,.94); color: #0b2447; font-weight: bold;
+}
+#controls button:active { transform: scale(.93); }
+#controls .pill { padding: 11px 20px; border-radius: 30px; font-size: .98rem; }
+#controls .circle { width: 46px; height: 46px; border-radius: 50%; font-size: 1.25rem; }
+#controls button.on { background: #ffd93d; box-shadow: 0 0 0 3px rgba(255,217,61,.45), 0 3px 10px rgba(0,0,0,.35); }
+
+/* ===== แผงโหมดเรียนรู้ ===== */
+#learnPanel {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: 14px; width: min(94vw, 480px); z-index: 700; display: none;
+}
+#learnPanel .card {
+  background: rgba(255,255,255,.97); border-radius: 18px; padding: 16px 18px 14px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.35); position: relative;
+}
+#learnPanel .head { display: flex; align-items: center; gap: 10px; }
+#learnIcon { font-size: 1.9rem; }
+#learnTitle { font-size: 1.05rem; font-weight: bold; color: #0b2447; margin: 0; }
+#learnText { font-size: .92rem; line-height: 1.7; color: #333; margin: 8px 0 10px; }
+#learnClose {
+  position: absolute; top: 8px; right: 10px; border: none; background: none;
+  font-size: 1.3rem; cursor: pointer; color: #999;
+}
+#learnNav { display: flex; align-items: center; justify-content: space-between; }
+#learnNav button {
+  border: none; border-radius: 24px; padding: 9px 20px; font-size: .95rem;
+  font-weight: bold; cursor: pointer;
+}
+#learnPrev { background: #e8ecf2; color: #0b2447; }
+#learnPrev:disabled { opacity: .4; }
+#learnNext { background: #19376d; color: #fff; }
+#learnDots { display: flex; gap: 5px; }
+#learnDots .dot { width: 8px; height: 8px; border-radius: 50%; background: #ccd4de; }
+#learnDots .dot.active { background: #ffb800; transform: scale(1.25); }
+
+/* ===== แผงควิซ ===== */
+#quizPanel {
+  position: fixed; inset: 0; z-index: 800; display: none;
+  background: rgba(4,16,36,.6); align-items: center; justify-content: center; padding: 16px;
+}
+#quizPanel .card {
+  background: #fff; border-radius: 20px; width: min(94vw, 440px);
+  padding: 20px 22px; position: relative; box-shadow: 0 10px 34px rgba(0,0,0,.4);
+}
+#quizCloseX {
+  position: absolute; top: 10px; right: 12px; border: none; background: none;
+  font-size: 1.35rem; cursor: pointer; color: #999;
+}
+#quizProgress { color: #f2a51a; font-weight: bold; font-size: .88rem; }
+#quizQuestion { font-size: 1.08rem; font-weight: bold; color: #0b2447; margin: 6px 0 14px; line-height: 1.6; }
+.quizChoice {
+  display: block; width: 100%; text-align: left; margin: 8px 0; padding: 12px 16px;
+  border: 2px solid #dde4ec; border-radius: 14px; background: #f7f9fc;
+  font-size: .95rem; cursor: pointer; color: #223;
+}
+.quizChoice.correct { border-color: #2eaa5e; background: #e5f7ec; }
+.quizChoice.wrong { border-color: #d9534f; background: #fdeaea; }
+#quizFeedback { font-size: .88rem; line-height: 1.6; color: #333; min-height: 2.6em; margin-top: 8px; }
+#quizNext {
+  display: none; margin-top: 6px; border: none; border-radius: 24px;
+  padding: 10px 26px; background: #19376d; color: #fff; font-size: .95rem;
+  font-weight: bold; cursor: pointer;
+}
+#quizResult { display: none; text-align: center; padding: 10px 0; }
+#quizStars { font-size: 2.2rem; letter-spacing: 4px; }
+#quizScoreText { font-size: 2.6rem; font-weight: bold; color: #0b2447; margin: 6px 0; }
+#quizMsg { color: #444; margin-bottom: 16px; }
+#quizResult button {
+  border: none; border-radius: 24px; padding: 10px 24px; margin: 0 5px;
+  font-size: .95rem; font-weight: bold; cursor: pointer;
+}
+#quizRetry { background: #ffd93d; color: #0b2447; }
+#quizClose { background: #e8ecf2; color: #0b2447; }

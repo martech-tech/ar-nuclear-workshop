@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>พิมพ์แผ่นมาร์กเกอร์ + ใบงาน — โรงไฟฟ้านิวเคลียร์ AR</title>
+  <script src="libs/qrcode.min.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #e9edf2; }
+
+    .toolbar { text-align: center; padding: 14px; background: #0b2447; color: #fff; }
+    .toolbar button {
+      padding: 10px 30px; font-size: 1rem; font-weight: bold; border: none;
+      border-radius: 30px; background: #ffd93d; color: #0b2447; cursor: pointer; margin: 0 6px;
+    }
+    .toolbar a { color: #9fd0ff; font-size: .9rem; margin: 0 8px; }
+    .warn {
+      max-width: 640px; margin: 12px auto; padding: 12px 16px; border-radius: 10px;
+      background: #fff3cd; color: #7a5c00; font-size: .9rem; display: none;
+    }
+
+    .sheet {
+      width: 210mm; min-height: 296mm; margin: 16px auto; background: #fff;
+      box-shadow: 0 4px 18px rgba(0,0,0,.15); box-sizing: border-box;
+      padding: 14mm 18mm; text-align: center; page-break-after: always; position: relative;
+    }
+    .sheet h1 { font-size: 1.5rem; color: #0b2447; margin: 0 0 2mm; }
+    .sheet .sub { color: #667; margin: 0 0 6mm; font-size: .95rem; }
+    .badge {
+      display: inline-block; background: #ffd93d; color: #0b2447; font-weight: bold;
+      border-radius: 20px; padding: 3px 14px; font-size: .85rem; margin-bottom: 4mm;
+    }
+    .step { font-size: 1.02rem; font-weight: bold; color: #19376d; margin: 5mm 0 3mm; }
+
+    #qrcode { display: inline-block; padding: 5mm; border: 3px solid #19376d; border-radius: 10px; }
+    #qrcode img, #qrcode canvas { display: block; }
+    .url { font-size: .78rem; color: #789; word-break: break-all; margin-top: 2mm; }
+
+    .marker-wrap { display: inline-block; padding: 12mm; background: #fff; } /* ขอบขาวจำเป็นต่อการตรวจจับ */
+    .marker-wrap img { width: 82mm; height: 82mm; image-rendering: pixelated; display: block; }
+    .note { font-size: .85rem; color: #556; margin-top: 3mm; line-height: 1.65; }
+    .footer { position: absolute; bottom: 8mm; left: 0; right: 0; font-size: .75rem; color: #99a; }
+
+    /* ===== ใบงาน ===== */
+    .worksheet { text-align: left; }
+    .worksheet h1 { text-align: center; }
+    .idline { display: flex; gap: 8mm; margin: 5mm 0; font-size: .95rem; }
+    .idline .blank { flex: 1; border-bottom: 1.5px dotted #99a; }
+    .task {
+      border: 2px solid #dde4ec; border-radius: 12px; padding: 4mm 5mm; margin: 4mm 0;
+      font-size: .93rem; line-height: 1.7;
+    }
+    .task b.no {
+      display: inline-block; background: #19376d; color: #fff; border-radius: 50%;
+      width: 7mm; height: 7mm; text-align: center; line-height: 7mm; margin-right: 3mm; font-size: .85rem;
+    }
+    .drawbox { border: 2px dashed #b8c4d4; border-radius: 10px; height: 52mm; margin-top: 3mm; }
+    .choices span { display: inline-block; margin-right: 10mm; }
+    .orderline { margin-top: 2mm; }
+    .orderline .slot {
+      display: inline-block; width: 9mm; border-bottom: 2px solid #19376d; text-align: center; margin-right: 2mm;
+    }
+    .starline { font-size: 1.4rem; letter-spacing: 6px; color: #ccc; }
+
+    /* บังคับขนาดหน้ากระดาษ ไม่งั้น margin ของเบราว์เซอร์จะดันเนื้อหาล้นไปหน้าถัดไป */
+    @page { size: A4; margin: 0; }
+    @media print {
+      .toolbar, .warn { display: none !important; }
+      body { background: #fff; }
+      .sheet { box-shadow: none; margin: 0; height: 296mm; min-height: 0; overflow: hidden; }
+      .task { break-inside: avoid; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <button onclick="window.print()">🖨️ พิมพ์ทั้งชุด (2 หน้า A4)</button>
+    <a href="workshop.html">📋 คู่มือผู้จัด workshop</a>
+    <a href="index.html">📷 หน้า AR</a>
+  </div>
+  <div class="warn" id="fileWarn">
+    ⚠️ หน้านี้ถูกเปิดจากไฟล์ในเครื่อง (file://) — QR code ที่ได้จะใช้กับมือถือไม่ได้
+    กรุณา deploy ขึ้นเว็บก่อน (เช่น Vercel) แล้วเปิดหน้านี้จากลิงก์จริง
+  </div>
+
+  <!-- ===== หน้า 1: แผ่นมาร์กเกอร์ ===== -->
+  <div class="sheet">
+    <div class="badge">Workshop วิทยาศาสตร์ · พลังงานสะอาด</div>
+    <h1>⚛️ โรงไฟฟ้านิวเคลียร์ AR</h1>
+    <p class="sub">สแกน → เล็ง → สำรวจ!</p>
+
+    <div class="step">ขั้นที่ 1 — สแกน QR ด้วยกล้องมือถือ เพื่อเปิดหน้า AR</div>
+    <div id="qrcode"></div>
+    <div class="url" id="urlText"></div>
+
+    <div class="step">ขั้นที่ 2 — อนุญาตให้ใช้กล้อง แล้วเล็งมาที่รูปด้านล่างนี้</div>
+    <div class="marker-wrap">
+      <img src="assets/hiro.png" alt="Hiro AR marker">
+    </div>
+    <div class="note">
+      โรงไฟฟ้านิวเคลียร์ 3 มิติจะโผล่ขึ้นบนกระดาษ — เดินรอบกระดาษเพื่อดูทุกมุม! 🚶<br>
+      <b>เคล็ดลับ:</b> วางกระดาษบนพื้นเรียบ แสงสว่างพอ อย่าให้เงามือบังรูปมาร์กเกอร์
+    </div>
+    <div class="footer">แผ่นมาร์กเกอร์ · โรงไฟฟ้านิวเคลียร์ AR Workshop</div>
+  </div>
+
+  <!-- ===== หน้า 2: ใบงานนักสำรวจ ===== -->
+  <div class="sheet worksheet">
+    <div style="text-align:center"><div class="badge">ใบงานนักสำรวจพลังงาน 🔬</div></div>
+    <h1>ภารกิจสำรวจโรงไฟฟ้านิวเคลียร์</h1>
+    <div class="idline">
+      <span>ชื่อ<span class="blank" style="display:inline-block; width:52mm"></span></span>
+      <span>ชั้น<span class="blank" style="display:inline-block; width:20mm"></span></span>
+      <span>โรงเรียน<span class="blank" style="display:inline-block; width:45mm"></span></span>
+    </div>
+
+    <div class="task">
+      <b class="no">1</b><b>นับให้ครบ!</b> เดินรอบโรงไฟฟ้าแล้วนับ — มีหอหล่อเย็นกี่หอ? ______ หอ
+      และมีรถจอดอยู่กี่คัน? ______ คัน
+    </div>
+
+    <div class="task">
+      <b class="no">2</b><b>ไอสีขาว</b> ที่ลอยขึ้นจากหอหล่อเย็นคืออะไร? (วงกลมคำตอบ)
+      <div class="choices" style="margin-top:2mm">
+        <span>ก. ควันพิษ</span><span>ข. ไอน้ำธรรมดา</span><span>ค. ก๊าซคาร์บอน</span>
+      </div>
+    </div>
+
+    <div class="task">
+      <b class="no">3</b><b>ส่องข้างใน!</b> กดปุ่ม 🔍 เพื่อมองทะลุโดม — เตาปฏิกรณ์ข้างในเป็นสีอะไร
+      แล้วอาคารโดมมีหน้าที่อะไร?<br>
+      ตอบ: <span class="blank" style="display:inline-block; width:120mm"></span>
+    </div>
+
+    <div class="task">
+      <b class="no">4</b><b>เรียงลำดับพลังงาน</b> — กดปุ่ม ⚡ ดูเม็ดพลังงานวิ่ง แล้วเติมเลข 1–5 ตามลำดับ
+      <div class="orderline">
+        <span class="slot">&nbsp;</span> ไอน้ำหมุนกังหัน &nbsp;&nbsp;
+        <span class="slot">&nbsp;</span> ฟิชชันให้ความร้อน &nbsp;&nbsp;
+        <span class="slot">&nbsp;</span> สายส่งพาไฟฟ้าไปบ้าน<br style="line-height:2.2">
+        <span class="slot">&nbsp;</span> ต้มน้ำเป็นไอแรงดันสูง &nbsp;&nbsp;
+        <span class="slot">&nbsp;</span> หม้อแปลงเพิ่มแรงดันไฟ
+      </div>
+    </div>
+
+    <div class="task">
+      <b class="no">5</b><b>วาดเลย!</b> วาดโรงไฟฟ้านิวเคลียร์มุมที่ชอบที่สุด พร้อมชี้ชื่ออาคาร 1 อาคาร
+      <div class="drawbox"></div>
+    </div>
+
+    <div class="task">
+      <b class="no">6</b><b>ท้าควิซ!</b> กดปุ่ม ❓ ในแอป ทำควิซ 5 ข้อ ได้กี่คะแนน ระบายดาวให้ตรง
+      <div class="starline">☆ ☆ ☆ ☆ ☆</div>
+    </div>
+
+    <div class="footer">ใบงานนักสำรวจ · โรงไฟฟ้านิวเคลียร์ AR Workshop</div>
+  </div>
+
+  <script>
+    var arUrl = new URL('index.html', window.location.href).href;
+
+    if (window.location.protocol === 'file:') {
+      document.getElementById('fileWarn').style.display = 'block';
+    }
+
+    new QRCode(document.getElementById('qrcode'), {
+      text: arUrl,
+      width: 190,
+      height: 190,
+      correctLevel: QRCode.CorrectLevel.H
+    });
+    document.getElementById('urlText').textContent = arUrl;
+  </script>
+</body>
+</html>
