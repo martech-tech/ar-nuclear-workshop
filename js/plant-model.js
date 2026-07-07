@@ -89,6 +89,61 @@
       '</a-entity>';
   }
 
+  // รั้วลวดรอบพื้นที่ (เสา + ราว 2 ชั้น) — skipFirst ข้ามเสาต้นแรกกันซ้อนกับมุมของช่วงก่อนหน้า
+  function fenceRun(x1, z1, x2, z2, skipFirst) {
+    var dx = x2 - x1, dz = z2 - z1;
+    var len = Math.sqrt(dx * dx + dz * dz);
+    var n = Math.max(2, Math.round(len / 0.36));
+    var out = '';
+    for (var i = skipFirst ? 1 : 0; i <= n; i++) {
+      var x = +(x1 + dx * i / n).toFixed(3), z = +(z1 + dz * i / n).toFixed(3);
+      out += '<a-cylinder position="' + x + ' 0.032 ' + z + '" radius="0.0045" height="0.064" color="#c3c9ce"></a-cylinder>';
+    }
+    var cx = +((x1 + x2) / 2).toFixed(3), cz = +((z1 + z2) / 2).toFixed(3);
+    var deg = +(-Math.atan2(dz, dx) * 180 / Math.PI).toFixed(1);
+    out += '<a-box position="' + cx + ' 0.052 ' + cz + '" rotation="0 ' + deg + ' 0" width="' + len.toFixed(3) + '" height="0.006" depth="0.006" color="#c3c9ce"></a-box>' +
+           '<a-box position="' + cx + ' 0.028 ' + cz + '" rotation="0 ' + deg + ' 0" width="' + len.toFixed(3) + '" height="0.006" depth="0.006" color="#c3c9ce"></a-box>';
+    return out;
+  }
+
+  // เสาไฟถนน
+  function streetlight(x, z, rotY) {
+    return '<a-entity position="' + x + ' 0 ' + z + '" rotation="0 ' + (rotY || 0) + ' 0">' +
+      '<a-cylinder position="0 0.07 0" radius="0.0045" height="0.14" color="#5d666d"></a-cylinder>' +
+      '<a-box position="0.02 0.138 0" width="0.04" height="0.006" depth="0.006" color="#5d666d"></a-box>' +
+      '<a-sphere position="0.038 0.134 0" radius="0.011" material="color: #fff2b0; emissive: #ffe98a; emissiveIntensity: 0.9"></a-sphere>' +
+      '</a-entity>';
+  }
+
+  // ถังเก็บน้ำ/เชื้อเพลิงสำรอง
+  function tank(x, z) {
+    return '<a-entity position="' + x + ' 0 ' + z + '">' +
+      '<a-cylinder position="0 0.055 0" radius="0.05" height="0.11" color="#f2f4f5"></a-cylinder>' +
+      '<a-cylinder position="0 0.113 0" radius="0.051" height="0.008" color="#9aa2a9"></a-cylinder>' +
+      '<a-cylinder position="0.058 0.03 0" radius="0.006" height="0.06" color="#9aa2a9"></a-cylinder>' +
+      shadow(0, 0, 0.065) +
+      '</a-entity>';
+  }
+
+  // คนตัวจิ๋ว (เสื้อสีต่างกัน)
+  function person(x, z, shirt) {
+    return '<a-entity position="' + x + ' 0 ' + z + '">' +
+      '<a-cylinder position="0 0.016 0" radius="0.011" height="0.032" color="' + shirt + '"></a-cylinder>' +
+      '<a-sphere position="0 0.041 0" radius="0.0095" color="#f0c8a0"></a-sphere>' +
+      '</a-entity>';
+  }
+
+  // พุ่มไม้กลม
+  function bush(x, z, s) {
+    return '<a-sphere position="' + x + ' 0.022 ' + z + '" radius="0.028" scale="1 0.75 1" color="' +
+      (s ? '#43a047' : '#2e7d32') + '"></a-sphere>';
+  }
+
+  // ทางเดินเท้า (แผ่นราบ)
+  function walkway(x, z, w, d) {
+    return '<a-plane position="' + x + ' 0.0065 ' + z + '" rotation="-90 0 0" width="' + w + '" height="' + d + '" color="#d8dcdf"></a-plane>';
+  }
+
   // กล่องรับสัมผัสโปร่งใส ครอบอาคารให้แตะได้ (opacity 0 แต่ raycast โดนอยู่)
   function hitBox(poi, x, y, z, w, h, d) {
     return '<a-box class="poi-hit" data-poi="' + poi + '" position="' + x + ' ' + y + ' ' + z + '"' +
@@ -111,8 +166,8 @@
   // ---------- ประกอบโมเดลทั้งหมด ----------
 
   var PLANT_HTML =
-    // ===== พื้น =====
-    '<a-circle position="0 0.001 0" rotation="-90 0 0" radius="1.25" color="#79b45f"></a-circle>' +
+    // ===== พื้น (รัศมีคลุมถึงแนวรั้วรอบไซต์) =====
+    '<a-circle position="0 0.001 0" rotation="-90 0 0" radius="1.55" color="#79b45f"></a-circle>' +
     '<a-plane position="-0.02 0.004 -0.15" rotation="-90 0 0" width="1.62" height="1.12" color="#cfd4d8"></a-plane>' +
     // ถนนทางเข้า (ใต้ → ลานหม้อแปลง) + เส้นแบ่งเลน
     '<a-plane position="-0.42 0.006 0.9" rotation="-90 0 0" width="0.16" height="0.62" color="#8f959b"></a-plane>' +
@@ -253,6 +308,64 @@
     '<a-entity class="plantLabel" thai-label="text: หอหล่อเย็น; icon: 🌫️; width: 0.46; accent: #3d9adf" billboard position="0.66 1.35 0.04"></a-entity>' +
     '<a-entity class="plantLabel" thai-label="text: อาคารกังหันไอน้ำ; icon: ⚙️; width: 0.55; accent: #3f6795" billboard position="-0.02 0.58 -0.52"></a-entity>' +
     '<a-entity class="plantLabel" thai-label="text: ลานหม้อแปลง; icon: ⚡; width: 0.46; accent: #f2a51a" billboard position="-0.05 0.62 0.63"></a-entity>' +
+
+    // ===== รั้วรอบพื้นที่ (เว้นช่องประตูทางเข้าที่ถนนด้านใต้) =====
+    '<a-entity id="siteFence">' +
+      fenceRun(-1.05, -0.9, 1.0, -0.9, false) +     // เหนือ
+      fenceRun(1.0, -0.9, 1.0, 1.02, true) +        // ตะวันออก (ข้ามเสามุมซ้ำ)
+      fenceRun(1.0, 1.02, -0.32, 1.02, true) +      // ใต้ (ขวาของประตู)
+      fenceRun(-0.52, 1.02, -1.05, 1.02, false) +   // ใต้ (ซ้ายของประตู)
+      fenceRun(-1.05, 1.02, -1.05, -0.9, true) +    // ตะวันตก (ข้ามเสามุมซ้ำ)
+    '</a-entity>' +
+
+    // ===== ป้อมยาม + ไม้กั้นทางเข้า =====
+    '<a-entity id="gateHouse">' +
+      shadow(-0.29, 0.97, 0.07) +
+      '<a-box position="-0.29 0.045 0.97" width="0.08" height="0.09" depth="0.07" color="#f5f0e1"></a-box>' +
+      '<a-box position="-0.29 0.095 0.97" width="0.09" height="0.012" depth="0.08" color="#cc4b3c"></a-box>' +
+      winRow(-0.29, 0.055, 0.936, 1, 0.05, 0.04, 0.035, 0) +
+      '<a-cylinder position="-0.345 0.03 1.0" radius="0.007" height="0.06" color="#5d666d"></a-cylinder>' +
+      '<a-box position="-0.43 0.055 1.0" width="0.06" height="0.01" depth="0.01" color="#e8483f"></a-box>' +
+      '<a-box position="-0.49 0.055 1.0" width="0.06" height="0.01" depth="0.01" color="#f4f6f8"></a-box>' +
+    '</a-entity>' +
+
+    // ===== เสาไฟถนน =====
+    streetlight(-0.52, 0.92, 0) + streetlight(-0.32, 0.7, 180) +
+    streetlight(-0.52, 0.48, 0) + streetlight(-0.88, 0.52, 180) +
+
+    // ===== ถังเก็บน้ำสำรอง =====
+    tank(-0.38, -0.85) + tank(-0.24, -0.85) +
+
+    // ===== ลานจอดเฮลิคอปเตอร์ =====
+    '<a-entity id="helipad" position="0.08 0 0.3">' +
+      '<a-circle position="0 0.005 0" rotation="-90 0 0" radius="0.085" color="#8f959b"></a-circle>' +
+      '<a-torus position="0 0.007 0" rotation="-90 0 0" radius="0.068" radius-tubular="0.005" segments-tubular="28" color="#f4f6f8"></a-torus>' +
+      '<a-box position="-0.018 0.008 0" width="0.01" height="0.002" depth="0.05" color="#f4f6f8"></a-box>' +
+      '<a-box position="0.018 0.008 0"  width="0.01" height="0.002" depth="0.05" color="#f4f6f8"></a-box>' +
+      '<a-box position="0 0.008 0"      width="0.026" height="0.002" depth="0.01" color="#f4f6f8"></a-box>' +
+    '</a-entity>' +
+
+    // ===== ทางเดินเชื่อมอาคาร =====
+    walkway(-0.35, -0.1, 0.4, 0.045) +      // โดม → กลางไซต์
+    walkway(-0.15, -0.3, 0.045, 0.44) +     // กลางไซต์ → อาคารกังหัน
+    walkway(-0.62, 0.4, 0.28, 0.045) +      // สำนักงาน → ถนน
+
+    // ===== เส้นช่องจอดรถ + รถเพิ่ม =====
+    '<a-plane position="-0.78 0.008 0.62" rotation="-90 0 0" width="0.008" height="0.2" color="#f4f6f8"></a-plane>' +
+    '<a-plane position="-0.68 0.008 0.62" rotation="-90 0 0" width="0.008" height="0.2" color="#f4f6f8"></a-plane>' +
+    '<a-plane position="-0.58 0.008 0.62" rotation="-90 0 0" width="0.008" height="0.2" color="#f4f6f8"></a-plane>' +
+    car(-0.82, 0.62, '#f4f6f8', 90) + car(-0.52, 0.62, '#e8b93a', 90) +
+
+    // ===== ผู้คนในไซต์ =====
+    person(-0.56, 0.82, '#d95f4b') + person(-0.18, -0.12, '#3f8fd2') + person(0.16, 0.42, '#2eaa5e') +
+
+    // ===== พุ่มไม้แต่งภูมิทัศน์ =====
+    bush(-0.86, 0.42, 0) + bush(-0.7, 0.42, 1) + bush(-0.92, 0.18, 1) +
+    bush(-0.36, -0.32, 0) + bush(-0.2, -0.32, 1) + bush(0.12, -0.32, 0) +
+    bush(-0.22, 0.9, 1) + bush(-0.2, 1.0, 0) +
+
+    // เส้นแบ่งเลนเพิ่มบนถนนเข้า
+    '<a-plane position="-0.42 0.008 1.12" rotation="-90 0 0" width="0.012" height="0.09" color="#f4f6f8"></a-plane>' +
 
     // ===== กล่องรับสัมผัส: แตะอาคารเพื่อดูการ์ดความรู้ =====
     '<a-entity id="poiHits">' +

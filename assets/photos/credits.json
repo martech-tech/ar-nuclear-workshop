@@ -1,0 +1,44 @@
+{
+ "dome": {
+  "title": "File:Kernkraftwerk Brennilis - Reaktorgebäude.jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Kernkraftwerk_Brennilis_-_Reaktorgeb%C3%A4ude.jpg/960px-Kernkraftwerk_Brennilis_-_Reaktorgeb%C3%A4ude.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Morpheus2309"
+ },
+ "cooling": {
+  "title": "File:De Molen (windmill) and the nuclear power plant cooling tower in Doel, Belgium (DSCF3859).jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/De_Molen_%28windmill%29_and_the_nuclear_power_plant_cooling_tower_in_Doel%2C_Belgium_%28DSCF3859%29.jpg/960px-De_Molen_%28windmill%29_and_the_nuclear_power_plant_cooling_tower_in_Doel%2C_Belgium_%28DSCF3859%29.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Trougnouf"
+ },
+ "turbine": {
+  "title": "File:Tarapur Atomic Power Station turbine hall.jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Tarapur_Atomic_Power_Station_turbine_hall.jpg/960px-Tarapur_Atomic_Power_Station_turbine_hall.jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "IAEA Imagebank, TAPS India"
+ },
+ "switchyard": {
+  "title": "File:Kimanis Sabah Kimanis-Power-Plant-02.jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Kimanis_Sabah_Kimanis-Power-Plant-02.jpg/960px-Kimanis_Sabah_Kimanis-Power-Plant-02.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "CEphoto, Uwe Aranas"
+ },
+ "pond": {
+  "title": "File:Krško Nuclear Power Plant 03.jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Kr%C5%A1ko_Nuclear_Power_Plant_03.jpg/960px-Kr%C5%A1ko_Nuclear_Power_Plant_03.jpg",
+  "license": "CC0",
+  "artist": "Janezdrilc"
+ },
+ "stack": {
+  "title": "File:Doel Kerncentrale 3.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Parttimephotographer",
+  "thumb": ""
+ },
+ "admin": {
+  "title": "File:Kozloduy Nuclear Power Plant - Control Room of Unit 5.jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/8/89/Kozloduy_Nuclear_Power_Plant_-_Control_Room_of_Unit_5.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Yovko Lambrev"
+ }
+}

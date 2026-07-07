@@ -49,6 +49,20 @@ npx serve -l 3000 .
 
 สรุปสั้น: พิมพ์แผ่นจาก print.html → วางกระดาษบนโต๊ะ → น้องสแกน QR → กด "เริ่มสำรวจ" → เล็งมาร์กเกอร์ → เดินสำรวจ ทำใบงาน แล้วท้าควิซ
 
+## 🖼️ เครดิตภาพจริงในการ์ดความรู้ (จาก Wikimedia Commons)
+
+| การ์ด | ไฟล์ต้นทาง | ผู้ถ่าย | สัญญาอนุญาต |
+|---|---|---|---|
+| อาคารเครื่องปฏิกรณ์ | Kernkraftwerk Brennilis - Reaktorgebäude.jpg | Morpheus2309 | CC BY-SA 3.0 |
+| หอหล่อเย็น | De Molen (windmill) and the nuclear power plant cooling tower in Doel… | Trougnouf (Benoit Brummer) | CC BY 4.0 |
+| อาคารกังหันไอน้ำ | Tarapur Atomic Power Station turbine hall.jpg | IAEA Imagebank, TAPS India | CC BY-SA 2.0 |
+| ลานหม้อแปลง | Kimanis Sabah Kimanis-Power-Plant-02.jpg | CEphoto, Uwe Aranas | CC BY-SA 3.0 |
+| บ่อพักน้ำ | Krško Nuclear Power Plant 03.jpg | Janezdrilc | CC0 |
+| ปล่องระบายอากาศ | Doel Kerncentrale 3.jpg | Parttimephotographer | CC BY-SA 4.0 |
+| อาคารสำนักงาน | Kozloduy Nuclear Power Plant - Control Room of Unit 5.jpg | Yovko Lambrev | CC BY 3.0 |
+
+รายละเอียดเต็มอยู่ใน `assets/photos/credits.json`
+
 ## แก้ปัญหาที่พบบ่อย
 
 - **กล้องไม่เปิด** → ต้อง `https://` + กดอนุญาตกล้อง · iPhone ใช้ Safari, Android ใช้ Chrome
