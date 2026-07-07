@@ -142,9 +142,13 @@
           ' material="color: #ff8c1a; emissive: #ff6a00; emissiveIntensity: 0.8"></a-cylinder>' +
         '<a-sphere position="-0.55 0.32 0.05" radius="0.1" theta-length="90"' +
           ' material="color: #ff8c1a; emissive: #ff6a00; emissiveIntensity: 0.8"></a-sphere>' +
-        '<a-cylinder position="-0.585 0.4 0.05" radius="0.008" height="0.12" color="#8d99a5"></a-cylinder>' +
-        '<a-cylinder position="-0.55 0.41 0.05"  radius="0.008" height="0.14" color="#8d99a5"></a-cylinder>' +
-        '<a-cylinder position="-0.515 0.4 0.05" radius="0.008" height="0.12" color="#8d99a5"></a-cylinder>' +
+        // แท่งควบคุม — ขยับขึ้นลงช้าๆ ให้เห็นว่ามันคือ "คันเร่ง-เบรก" ของเตา
+        '<a-cylinder position="-0.585 0.4 0.05" radius="0.008" height="0.12" color="#8d99a5"' +
+          ' animation__rod="property: position; from: -0.585 0.38 0.05; to: -0.585 0.44 0.05; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-cylinder>' +
+        '<a-cylinder position="-0.55 0.41 0.05"  radius="0.008" height="0.14" color="#8d99a5"' +
+          ' animation__rod="property: position; from: -0.55 0.39 0.05; to: -0.55 0.46 0.05; dir: alternate; dur: 3100; loop: true; easing: easeInOutSine"></a-cylinder>' +
+        '<a-cylinder position="-0.515 0.4 0.05" radius="0.008" height="0.12" color="#8d99a5"' +
+          ' animation__rod="property: position; from: -0.515 0.44 0.05; to: -0.515 0.38 0.05; dir: alternate; dur: 2700; loop: true; easing: easeInOutSine"></a-cylinder>' +
         '<a-sphere position="-0.55 0.24 0.05" radius="0.13"' +
           ' material="color: #ffd23d; transparent: true; opacity: 0.25; depthWrite: false"' +
           ' animation__pulse="property: material.opacity; from: 0.25; to: 0.06; dir: alternate; dur: 900; loop: true; easing: easeInOutSine"></a-sphere>' +

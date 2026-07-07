@@ -14,13 +14,32 @@ a-scene canvas {
   user-select: none;
 }
 
+/* ===== แถบโลโก้งาน + JKnowledge (ลอยบนฉากตลอด) ===== */
+.logoBadge {
+  position: fixed; z-index: 460; display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.93); border-radius: 14px; padding: 6px 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25); pointer-events: none;
+}
+.logoBadge img { display: block; }
+.logoBadge .jk { width: 34px; height: 34px; }
+.logoBadge .expo { height: 30px; width: auto; }
+
+/* โลโก้บนหน้าจอเริ่มต้น */
+.splashLogos { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.splashLogos .jk { width: 64px; height: 64px; border-radius: 50%; background: #fff; }
+.splashLogos .expo { height: 56px; width: auto; background: #fff; border-radius: 12px; padding: 4px 10px; }
+
 /* ===== หน้าจอเริ่มต้น ===== */
 #splash {
   position: fixed; inset: 0; z-index: 999;
   background: linear-gradient(160deg, #0b2447 0%, #19376d 55%, #146c94 100%);
   color: #fff; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; text-align: center; padding: 24px;
+  align-items: center; text-align: center; padding: 24px;
+  overflow-y: auto;   /* จอเตี้ยเลื่อนดูได้ ไม่โดนตัด */
 }
+/* margin auto บน-ล่าง = จัดกลางเมื่อจอสูงพอ และเลื่อนได้ถูกต้องเมื่อล้น */
+#splash .splashLogos { margin-top: auto; }
+#splash .alt-link { margin-bottom: auto; padding-bottom: 8px; }
 #splash .atom { font-size: 4.2rem; animation: spin 7s linear infinite; filter: drop-shadow(0 0 18px rgba(255,217,61,.55)); }
 @keyframes spin { to { transform: rotate(360deg); } }
 #splash h1 { font-size: 1.65rem; margin: 10px 0 4px; }
@@ -36,12 +55,13 @@ a-scene canvas {
 #splash .alt-link { margin-top: 16px; font-size: .88rem; }
 #splash .alt-link a { color: #9fd0ff; }
 
-/* ===== คำใบ้ ===== */
+/* ===== คำใบ้ (ชิดขวา เว้นที่ให้แถบโลโก้มุมซ้ายบนบนจอแคบ) ===== */
 #hint {
-  position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+  position: fixed; top: 14px; right: 12px;
   z-index: 500; background: rgba(11,36,71,.87); color: #fff;
   padding: 10px 18px; border-radius: 24px; font-size: .92rem;
-  display: none; white-space: nowrap; box-shadow: 0 2px 10px rgba(0,0,0,.3);
+  display: none; box-sizing: border-box; max-width: calc(100vw - 155px);
+  line-height: 1.5; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.3);
 }
 
 /* ===== แถบปุ่มควบคุม ===== */
@@ -106,6 +126,11 @@ a-scene canvas {
 #poiName { font-size: 1.08rem; font-weight: bold; color: #0b2447; margin: 0; }
 #poiTag { font-size: .82rem; color: #f2a51a; font-weight: bold; margin: 1px 0 0; }
 #poiBody { font-size: .92rem; line-height: 1.7; color: #333; margin: 9px 0 8px; }
+#poiSpecs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+#poiSpecs .chip {
+  background: #eef3f9; border: 1.5px solid #d3dfec; color: #19376d;
+  border-radius: 20px; padding: 4px 12px; font-size: .78rem; font-weight: bold;
+}
 #poiFact {
   background: #fff6d6; border-radius: 10px; padding: 8px 12px;
   font-size: .85rem; line-height: 1.65; color: #5a4500;
