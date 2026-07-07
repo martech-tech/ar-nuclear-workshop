@@ -40,5 +40,11 @@
   "thumb": "https://upload.wikimedia.org/wikipedia/commons/8/89/Kozloduy_Nuclear_Power_Plant_-_Control_Room_of_Unit_5.jpg",
   "license": "CC BY 3.0",
   "artist": "Yovko Lambrev"
+ },
+ "fuel": {
+  "title": "File:San Onofre Nuclear Generating Station spent fuel pool, 2014.jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/San_Onofre_Nuclear_Generating_Station_spent_fuel_pool%2C_2014.jpg/960px-San_Onofre_Nuclear_Generating_Station_spent_fuel_pool%2C_2014.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Nuclear Regulatory Commission from US"
  }
 }

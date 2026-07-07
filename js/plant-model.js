@@ -144,6 +144,15 @@
     return '<a-plane position="' + x + ' 0.0065 ' + z + '" rotation="-90 0 0" width="' + w + '" height="' + d + '" color="#d8dcdf"></a-plane>';
   }
 
+  // หมุดสีเหลืองกะพริบ บอกจุดที่แตะได้ (คลาส plantLabel ทำให้ซ่อนอัตโนมัติตอนการ์ดเปิด)
+  function tapPin(x, y, z) {
+    return '<a-entity class="plantLabel" position="' + x + ' ' + y + ' ' + z + '">' +
+      '<a-sphere radius="0.02" material="color: #ffd23d; emissive: #ffb800; emissiveIntensity: 0.8"' +
+      ' animation__bob="property: position; from: 0 0 0; to: 0 0.045 0; dir: alternate; dur: 700; loop: true; easing: easeInOutQuad"' +
+      ' animation__pulse="property: scale; from: 0.8 0.8 0.8; to: 1.25 1.25 1.25; dir: alternate; dur: 700; loop: true; easing: easeInOutSine"></a-sphere>' +
+      '</a-entity>';
+  }
+
   // กล่องรับสัมผัสโปร่งใส ครอบอาคารให้แตะได้ (opacity 0 แต่ raycast โดนอยู่)
   function hitBox(poi, x, y, z, w, h, d) {
     return '<a-box class="poi-hit" data-poi="' + poi + '" position="' + x + ' ' + y + ' ' + z + '"' +
@@ -337,7 +346,7 @@
     tank(-0.38, -0.85) + tank(-0.24, -0.85) +
 
     // ===== ลานจอดเฮลิคอปเตอร์ =====
-    '<a-entity id="helipad" position="0.08 0 0.3">' +
+    '<a-entity id="helipad" position="0.45 0 -0.78">' +
       '<a-circle position="0 0.005 0" rotation="-90 0 0" radius="0.085" color="#8f959b"></a-circle>' +
       '<a-torus position="0 0.007 0" rotation="-90 0 0" radius="0.068" radius-tubular="0.005" segments-tubular="28" color="#f4f6f8"></a-torus>' +
       '<a-box position="-0.018 0.008 0" width="0.01" height="0.002" depth="0.05" color="#f4f6f8"></a-box>' +
@@ -377,7 +386,18 @@
       hitBox('pond',        0.52, 0.06,  0.82, 0.58, 0.14, 0.58) +
       hitBox('stack',      -0.88, 0.36, -0.3,  0.16, 0.78, 0.16) +
       hitBox('admin',      -0.78, 0.1,   0.3,  0.26, 0.24, 0.22) +
+      hitBox('fuel',       -0.24, 0.14,  0.28, 0.32, 0.28, 0.28) +
+      hitBox('helipad',     0.45, 0.08, -0.78, 0.2,  0.16, 0.18) +
+      hitBox('gate',       -0.36, 0.06,  0.97, 0.28, 0.13, 0.16) +
     '</a-entity>' +
+
+    // ===== หมุดบอกจุดแตะ (จุดรองที่ไม่มีป้ายใหญ่) — y อยู่ในกล่อง hitbox เพื่อให้แตะโดนแน่ =====
+    tapPin(-0.24, 0.24, 0.28) +   // อาคารเชื้อเพลิง
+    tapPin(0.52, 0.1, 0.82) +     // บ่อพักน้ำ
+    tapPin(-0.88, 0.7, -0.3) +    // ปล่องระบายอากาศ
+    tapPin(-0.78, 0.18, 0.3) +    // อาคารสำนักงาน
+    tapPin(0.45, 0.13, -0.78) +   // ลานเฮลิคอปเตอร์
+    tapPin(-0.33, 0.1, 0.97) +    // ป้อมยาม
 
     // ===== ลูกศรไฮไลต์ (โหมดเรียนรู้) =====
     '<a-entity id="stepMarker" visible="false">' +
