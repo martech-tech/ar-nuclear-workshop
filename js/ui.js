@@ -199,10 +199,36 @@
     energyOn: false, cutawayOn: false,   // สถานะที่ผู้ใช้กดเอง
     learnOpen: false, learnStep: 0,
     poiOpen: null, arMode: false, tapHintShown: false,
+    discovered: {}, discoverCount: 0, allFoundShown: false,
     quizIndex: 0, quizScore: 0, quizAnswered: false
   };
 
+  var DISCOVER_TOTAL = Object.keys(POI).length;   // จำนวนจุดทั้งหมด (= 10)
+
   function $(id) { return document.getElementById(id); }
+
+  // ---------- เกมสะสมจุดสำรวจ: แตะครบทุกจุดแล้วฉลอง ----------
+  function updateDiscoverBadge() {
+    var badge = $('discoverBadge');
+    if (!badge) return;
+    $('discoverCount').textContent = state.discoverCount;
+    $('discoverTotal').textContent = DISCOVER_TOTAL;
+    badge.classList.remove('pop');
+    void badge.offsetWidth;   // รีสตาร์ทอนิเมชัน
+    badge.classList.add('pop');
+    badge.classList.toggle('complete', state.discoverCount >= DISCOVER_TOTAL);
+  }
+
+  function markDiscovered(id) {
+    if (state.discovered[id]) return;
+    state.discovered[id] = true;
+    state.discoverCount++;
+    updateDiscoverBadge();
+    if (state.discoverCount >= DISCOVER_TOTAL && !state.allFoundShown) {
+      state.allFoundShown = true;
+      setTimeout(function () { $('allFound').style.display = 'flex'; }, 500);
+    }
+  }
 
   // ---------- โหมดส่องข้างใน (ทำผนังโดมโปร่งใส) ----------
   function applyCutaway(on) {
@@ -280,6 +306,7 @@
     var p = POI[id];
     if (!p || state.learnOpen) return;   // ระหว่างโหมดเรียนรู้ ให้เดินเรื่องตามบทก่อน
     state.poiOpen = id;
+    markDiscovered(id);
     hideTapHint();
     $('poiEmoji').textContent = p.emoji;
     $('poiName').textContent = p.name;
@@ -549,6 +576,14 @@
     $('poiClose').addEventListener('click', function () { closePoi(false); });
     $('poiOverview').addEventListener('click', function () { closePoi(true); });
     if (!state.arMode) setTimeout(showTapHint, 1600);   // โหมด 3D: บอกใบ้ทันทีที่เข้า
+
+    // เกมสะสมจุด: ตั้งค่าตัวนับเริ่มต้น + ปุ่มปิดหน้าฉลอง
+    if ($('discoverTotal')) $('discoverTotal').textContent = DISCOVER_TOTAL;
+    if ($('allFoundClose')) {
+      $('allFoundClose').addEventListener('click', function () {
+        $('allFound').style.display = 'none';
+      });
+    }
 
     // ย่อ / ขยาย / หมุน
     $('btnGrow').addEventListener('click', function () {

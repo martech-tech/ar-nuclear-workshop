@@ -57,10 +57,10 @@ a-scene canvas {
 
 /* ===== คำใบ้ (ชิดขวา เว้นที่ให้แถบโลโก้มุมซ้ายบนบนจอแคบ) ===== */
 #hint {
-  position: fixed; top: 14px; right: 12px;
+  position: fixed; bottom: 128px; left: 50%; transform: translateX(-50%);
   z-index: 500; background: rgba(11,36,71,.87); color: #fff;
   padding: 10px 18px; border-radius: 24px; font-size: .92rem;
-  display: none; box-sizing: border-box; max-width: calc(100vw - 155px);
+  display: none; box-sizing: border-box; max-width: calc(100vw - 32px);
   line-height: 1.5; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.3);
 }
 
@@ -153,12 +153,49 @@ a-scene canvas {
 }
 #poiWalkTip { font-size: .85rem; color: #19376d; font-weight: bold; }
 
+/* ===== ตัวนับจุดสำรวจ (เกมสะสม 10 จุด) ===== */
+#discoverBadge {
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+  z-index: 470; background: rgba(11,36,71,.9); color: #fff;
+  padding: 7px 16px; border-radius: 22px; font-size: .9rem; font-weight: bold;
+  box-shadow: 0 2px 10px rgba(0,0,0,.3); white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+}
+#discoverBadge b { color: #ffd93d; font-size: 1rem; }
+#discoverBadge.pop { animation: discoverPop .45s ease; }
+#discoverBadge.complete { background: #2eaa5e; }
+@keyframes discoverPop {
+  0% { transform: translateX(-50%) scale(1); }
+  40% { transform: translateX(-50%) scale(1.22); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+/* ===== หน้าฉลองเมื่อสำรวจครบ ===== */
+#allFound {
+  position: fixed; inset: 0; z-index: 850; display: none;
+  background: rgba(4,16,36,.68); align-items: center; justify-content: center; padding: 20px;
+}
+#allFound .card {
+  background: #fff; border-radius: 22px; width: min(92vw, 400px); text-align: center;
+  padding: 26px 24px 22px; box-shadow: 0 12px 40px rgba(0,0,0,.45);
+}
+#allFound .burst { font-size: 3.6rem; animation: burstSpin 1.2s ease infinite alternate; }
+@keyframes burstSpin { from { transform: scale(1) rotate(-8deg); } to { transform: scale(1.15) rotate(8deg); } }
+#allFound h2 { color: #0b2447; font-size: 1.35rem; margin: 8px 0 6px; }
+#allFound p { color: #444; line-height: 1.7; font-size: .96rem; margin: 0 0 18px; }
+#allFoundClose {
+  border: none; border-radius: 26px; padding: 12px 34px; font-size: 1.05rem; font-weight: bold;
+  background: #ffd93d; color: #0b2447; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.25);
+}
+#allFoundClose:active { transform: scale(.96); }
+
 /* คำใบ้ "แตะอาคารได้นะ" */
 #tapHint {
-  position: fixed; top: 58px; left: 50%; transform: translateX(-50%);
+  position: fixed; top: 56px; left: 50%; transform: translateX(-50%);
   z-index: 450; background: rgba(255,217,61,.96); color: #0b2447;
-  padding: 10px 20px; border-radius: 24px; font-size: .95rem; font-weight: bold;
-  display: none; white-space: nowrap; box-shadow: 0 3px 12px rgba(0,0,0,.3);
+  padding: 10px 18px; border-radius: 24px; font-size: .92rem; font-weight: bold;
+  display: none; max-width: calc(100vw - 28px); text-align: center; line-height: 1.5;
+  box-shadow: 0 3px 12px rgba(0,0,0,.3);
   transition: opacity .8s; animation: tapBounce 1.4s ease-in-out infinite;
 }
 @keyframes tapBounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
