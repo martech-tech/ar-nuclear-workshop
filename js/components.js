@@ -191,6 +191,7 @@
       this.theta = Math.PI / 4;      // มุมรอบแกนตั้ง
       this.phi   = Math.PI / 3.1;    // มุมเงย
       this.dist  = this.data.distance;
+      this.goalDist = this.dist;     // ระยะเป้าหมาย (ค่อยๆ เลื่อนเข้าใน tick)
       this.auto  = this.data.autoRotate;
       this.dragging = false;
       this.lastX = 0; this.lastY = 0;
@@ -219,7 +220,7 @@
           }
         }, { passive: true });
         canvas.addEventListener('wheel', function (e) {
-          self.dist = Math.max(self.data.minDistance, Math.min(self.data.maxDistance, self.dist + e.deltaY * 0.0018));
+          self.goalDist = self.dist = Math.max(self.data.minDistance, Math.min(self.data.maxDistance, self.dist + e.deltaY * 0.0018));
         }, { passive: true });
       }
       if (this.el.sceneEl.canvas) bindCanvas();
@@ -236,20 +237,48 @@
             e.touches[0].clientY - e.touches[1].clientY
           );
           if (dNow > 1) {
-            self.dist = Math.max(self.data.minDistance,
+            self.goalDist = self.dist = Math.max(self.data.minDistance,
               Math.min(self.data.maxDistance, self.dist * (self.pinchDist / dNow)));
             self.pinchDist = dNow;
           }
         }
       }, { passive: true });
-      window.addEventListener('touchend', function () { self.dragging = false; self.pinchDist = 0; });
+      window.addEventListener('touchend', function (e) {
+        if (e.touches.length === 1) {
+          // ปล่อยจากบีบนิ้วเหลือนิ้วเดียว → เปลี่ยนเป็นลากหมุนต่อได้เลย
+          self.pinchDist = 0;
+          self.lastX = e.touches[0].clientX;
+          self.lastY = e.touches[0].clientY;
+          self.dragging = true;
+        } else if (e.touches.length === 0) {
+          self.dragging = false;
+          self.pinchDist = 0;
+        }
+      });
 
       this.targetVec = new THREE.Vector3(this.data.target.x, this.data.target.y, this.data.target.z);
+      this.goalTarget = this.targetVec.clone();
       this.lookMatrix = new THREE.Matrix4();
       this.up = new THREE.Vector3(0, 1, 0);
     },
+    // บินกล้องเข้าไปโฟกัสจุดที่กำหนด (ใช้ตอนแตะอาคาร)
+    flyTo: function (x, y, z, dist) {
+      this.goalTarget.set(x, y, z);
+      this.goalDist = Math.max(this.data.minDistance, Math.min(this.data.maxDistance, dist));
+      this.auto = false;
+    },
+    // กลับมุมมองภาพรวม
+    overview: function () {
+      var t = this.data.target;
+      this.goalTarget.set(t.x, t.y, t.z);
+      this.goalDist = this.data.distance;
+    },
     tick: function (time, dt) {
       if (this.auto) this.theta += (dt || 16) * 0.00012;
+      // เลื่อนเข้าหาเป้าหมายแบบนุ่มนวล
+      var k = 1 - Math.exp(-(dt || 16) * 0.005);
+      this.targetVec.lerp(this.goalTarget, k);
+      this.dist += (this.goalDist - this.dist) * k;
       var t = this.targetVec;
       var x = t.x + this.dist * Math.sin(this.phi) * Math.sin(this.theta);
       var y = t.y + this.dist * Math.cos(this.phi);

@@ -89,6 +89,13 @@
       '</a-entity>';
   }
 
+  // กล่องรับสัมผัสโปร่งใส ครอบอาคารให้แตะได้ (opacity 0 แต่ raycast โดนอยู่)
+  function hitBox(poi, x, y, z, w, h, d) {
+    return '<a-box class="poi-hit" data-poi="' + poi + '" position="' + x + ' ' + y + ' ' + z + '"' +
+      ' width="' + w + '" height="' + h + '" depth="' + d + '"' +
+      ' material="transparent: true; opacity: 0; depthWrite: false"></a-box>';
+  }
+
   // รถยนต์คันจิ๋ว
   function car(x, z, color, rotY) {
     return '<a-entity position="' + x + ' 0 ' + z + '" rotation="0 ' + (rotY || 0) + ' 0">' +
@@ -242,6 +249,18 @@
     '<a-entity class="plantLabel" thai-label="text: หอหล่อเย็น; icon: 🌫️; width: 0.46; accent: #3d9adf" billboard position="0.66 1.35 0.04"></a-entity>' +
     '<a-entity class="plantLabel" thai-label="text: อาคารกังหันไอน้ำ; icon: ⚙️; width: 0.55; accent: #3f6795" billboard position="-0.02 0.58 -0.52"></a-entity>' +
     '<a-entity class="plantLabel" thai-label="text: ลานหม้อแปลง; icon: ⚡; width: 0.46; accent: #f2a51a" billboard position="-0.05 0.62 0.63"></a-entity>' +
+
+    // ===== กล่องรับสัมผัส: แตะอาคารเพื่อดูการ์ดความรู้ =====
+    '<a-entity id="poiHits">' +
+      hitBox('dome',       -0.55, 0.4,  0.05,  0.62, 0.8,  0.62) +
+      hitBox('cooling',     0.66, 0.45, -0.2,  0.72, 0.95, 0.48) +   // หดฝั่งเหนือ ไม่ให้ทับเครื่องกำเนิดไฟฟ้า
+      hitBox('cooling',     0.66, 0.45,  0.34, 0.72, 0.95, 0.6) +
+      hitBox('turbine',     0.0,  0.16, -0.52, 1.2,  0.4,  0.44) +
+      hitBox('switchyard', -0.05, 0.2,   0.63, 0.5,  0.42, 0.34) +
+      hitBox('pond',        0.52, 0.06,  0.82, 0.58, 0.14, 0.58) +
+      hitBox('stack',      -0.88, 0.36, -0.3,  0.16, 0.78, 0.16) +
+      hitBox('admin',      -0.78, 0.1,   0.3,  0.26, 0.24, 0.22) +
+    '</a-entity>' +
 
     // ===== ลูกศรไฮไลต์ (โหมดเรียนรู้) =====
     '<a-entity id="stepMarker" visible="false">' +

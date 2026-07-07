@@ -20,7 +20,7 @@
     <p class="tagline">Workshop วิทยาศาสตร์ · พลังงานสะอาด</p>
     <p>1. อนุญาตให้ใช้กล้องเมื่อเบราว์เซอร์ถาม แล้วกด "เริ่มสำรวจ"<br>
        2. เล็งกล้องไปที่ <b>รูปมาร์กเกอร์</b> บนกระดาษ<br>
-       3. เดินรอบๆ โรงไฟฟ้า กด 📖 เรียนรู้ แล้วท้าควิซ!</p>
+       3. เดินรอบๆ <b>แตะอาคาร</b>เพื่อซูมดูข้อมูล แล้วท้าควิซ!</p>
     <button id="startBtn" disabled>กำลังโหลด...</button>
     <p class="alt-link">ไม่มีแผ่นมาร์กเกอร์? <a href="viewer.html">เปิดโหมด 3D ธรรมดา 🖥️</a></p>
   </div>
@@ -59,6 +59,29 @@
       </div>
     </div>
   </div>
+
+  <!-- การ์ดความรู้ประจำอาคาร (แตะอาคารเพื่อเปิด) -->
+  <div id="poiPanel">
+    <div class="card">
+      <button id="poiClose">✕</button>
+      <div class="head">
+        <span id="poiEmoji"></span>
+        <div>
+          <p id="poiName"></p>
+          <p id="poiTag"></p>
+        </div>
+      </div>
+      <p id="poiBody"></p>
+      <div id="poiFact"></div>
+      <div id="poiActions">
+        <span id="poiWalkTip">🚶 เดินเข้าไปดูใกล้ๆ ได้เลย!</span>
+        <button id="poiOverview">↩ ดูภาพรวม</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- คำใบ้แตะอาคาร -->
+  <div id="tapHint">👆 แตะอาคารเพื่อซูมดูข้อมูล</div>
 
   <!-- แผงควิซ -->
   <div id="quizPanel">

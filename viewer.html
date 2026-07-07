@@ -27,7 +27,7 @@
 </head>
 <body>
 
-  <div id="dragTip">🖐️ ลากเพื่อหมุน · บีบนิ้ว/ลูกกลิ้งเพื่อซูม</div>
+  <div id="dragTip">🖐️ ลากหมุน · บีบนิ้วซูม · 👆 แตะอาคารเพื่อดูข้อมูล</div>
   <a href="index.html" id="arLink">📷 โหมด AR</a>
 
   <!-- แถบปุ่มควบคุม (ชุดเดียวกับหน้า AR) -->
@@ -61,6 +61,29 @@
       </div>
     </div>
   </div>
+
+  <!-- การ์ดความรู้ประจำอาคาร (แตะอาคารเพื่อเปิด) -->
+  <div id="poiPanel">
+    <div class="card">
+      <button id="poiClose">✕</button>
+      <div class="head">
+        <span id="poiEmoji"></span>
+        <div>
+          <p id="poiName"></p>
+          <p id="poiTag"></p>
+        </div>
+      </div>
+      <p id="poiBody"></p>
+      <div id="poiFact"></div>
+      <div id="poiActions">
+        <span id="poiWalkTip">🚶 เดินเข้าไปดูใกล้ๆ ได้เลย!</span>
+        <button id="poiOverview">↩ ดูภาพรวม</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- คำใบ้แตะอาคาร -->
+  <div id="tapHint">👆 แตะอาคารเพื่อซูมดูข้อมูล</div>
 
   <!-- แผงควิซ -->
   <div id="quizPanel">
