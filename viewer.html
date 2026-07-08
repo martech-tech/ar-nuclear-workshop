@@ -31,7 +31,25 @@
       <div class="burst">🎉</div>
       <h2>สำรวจครบทุกจุดแล้ว!</h2>
       <p>เธอคือ <b>นักสำรวจพลังงานตัวจริง</b> 🏆<br>พบครบทั้ง 10 จุดของโรงไฟฟ้านิวเคลียร์</p>
-      <button id="allFoundClose">เยี่ยมเลย!</button>
+      <input id="allFoundName" type="text" maxlength="30" placeholder="ใส่ชื่อลงการ์ด (ไม่บังคับ)">
+      <div class="afRow">
+        <button id="allFoundShare" class="afPrimary">📸 แชร์การ์ดผลงาน</button>
+        <button id="allFoundPassport" class="afSecondary">📔 พาสปอร์ต</button>
+      </div>
+      <button id="allFoundClose" class="afText">เยี่ยมเลย! ปิด</button>
+      <div class="afConsent">🔒 ภาพสร้างในเครื่อง ไม่ส่งขึ้นเซิร์ฟเวอร์ · ขออนุญาตผู้ปกครองก่อนแชร์</div>
+    </div>
+  </div>
+
+  <!-- พาสปอร์ตนักสำรวจ (ซีรีส์สะสม) -->
+  <div id="passportPanel">
+    <div class="card">
+      <button id="passportClose">✕</button>
+      <h2>📔 พาสปอร์ตนักสำรวจ</h2>
+      <div id="passportProgress"></div>
+      <div id="passportGrid"></div>
+      <p class="ppNote">สะสมตราให้ครบทุกสถานี! สถานีใหม่มาเรื่อยๆ ในงาน JKnowledge 🚀</p>
+      <button id="passportShare" class="afPrimary">📸 แชร์การ์ดผลงาน</button>
     </div>
   </div>
 
@@ -135,6 +153,7 @@
     <a-entity camera="fov: 55; near: 0.05; far: 30" simple-orbit="target: 0 0.32 0; distance: 3.1" look-controls="enabled: false" wasd-controls="enabled: false"></a-entity>
   </a-scene>
 
+  <script src="js/share.js"></script>
   <script src="js/ui.js"></script>
   <script>
     injectPlant('#plant');

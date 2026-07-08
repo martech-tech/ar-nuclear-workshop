@@ -227,8 +227,86 @@
     updateDiscoverBadge();
     if (state.discoverCount >= DISCOVER_TOTAL && !state.allFoundShown) {
       state.allFoundShown = true;
+      stampStation('nuclear');   // ประทับตราสถานีนี้ลงพาสปอร์ต
       setTimeout(function () { $('allFound').style.display = 'flex'; }, 500);
     }
+  }
+
+  // ---------- พาสปอร์ตนักสำรวจ JKnowledge (ซีรีส์สะสม) ----------
+  // สถานีนี้ = 'nuclear' ที่เหลือ "เร็วๆ นี้" — เก็บความคืบหน้าใน localStorage
+  var STATIONS = [
+    { id: 'nuclear', icon: '⚛️', name: 'โรงไฟฟ้านิวเคลียร์', status: 'current' },
+    { id: 'solar',   icon: '🪐', name: 'ระบบสุริยะ',          status: 'soon' },
+    { id: 'heart',   icon: '❤️', name: 'หัวใจมนุษย์',         status: 'soon' },
+    { id: 'volcano', icon: '🌋', name: 'ภูเขาไฟ',             status: 'soon' },
+    { id: 'dna',     icon: '🧬', name: 'รหัสพันธุกรรม DNA',    status: 'soon' },
+    { id: 'dam',     icon: '💧', name: 'เขื่อนพลังน้ำ',        status: 'soon' }
+  ];
+
+  function getStamps() {
+    try { return JSON.parse(localStorage.getItem('jk_passport') || '{}'); }
+    catch (e) { return {}; }
+  }
+  function stampStation(id) {
+    try {
+      var s = getStamps(); s[id] = true;
+      localStorage.setItem('jk_passport', JSON.stringify(s));
+    } catch (e) {}
+  }
+
+  function renderPassport() {
+    var stamps = getStamps();
+    var done = STATIONS.filter(function (st) { return stamps[st.id]; }).length;
+    $('passportProgress').textContent = 'สะสมแล้ว ' + done + ' / ' + STATIONS.length + ' สถานี';
+    var html = '';
+    STATIONS.forEach(function (st) {
+      var got = !!stamps[st.id];
+      var cls = 'stationCard' + (got ? ' got' : (st.status === 'current' ? ' current' : ' soon'));
+      var badge = got ? '✅ ผ่านแล้ว' : (st.status === 'current' ? '▶ กำลังสำรวจ' : '🔒 เร็วๆ นี้');
+      html += '<div class="' + cls + '">' +
+        '<div class="stIcon">' + st.icon + '</div>' +
+        '<div class="stName">' + st.name + '</div>' +
+        '<div class="stBadge">' + badge + '</div>' +
+        '</div>';
+    });
+    $('passportGrid').innerHTML = html;
+  }
+
+  function openPassport() {
+    renderPassport();
+    $('passportPanel').style.display = 'flex';
+  }
+  function closePassport() { $('passportPanel').style.display = 'none'; }
+
+  // ---------- แชร์ผลงาน / ถ่ายเซลฟี่ AR ----------
+  function busy(btn, on, label) {
+    if (!btn) return;
+    if (on) { btn.dataset.txt = btn.textContent; btn.textContent = label || 'กำลังสร้าง...'; btn.disabled = true; }
+    else { btn.textContent = btn.dataset.txt || btn.textContent; btn.disabled = false; }
+  }
+
+  function shareCard(btn, fromPassport) {
+    if (!window.JKShare) return;
+    if (!btn || !btn.tagName) btn = $('allFoundShare');
+    var name = ($('allFoundName') && $('allFoundName').value || '').trim().slice(0, 30);
+    // ถ้าเปิดจากพาสปอร์ตและสถานีนี้ผ่านแล้ว ให้การ์ดเป็น 10/10 (session อาจนับใหม่เป็น 0)
+    var pts = (fromPassport && getStamps().nuclear) ? DISCOVER_TOTAL : state.discoverCount;
+    busy(btn, true, '📸 กำลังสร้างการ์ด...');
+    JKShare.makeCard({ name: name, points: pts, total: DISCOVER_TOTAL,
+                       stationName: 'โรงไฟฟ้านิวเคลียร์ AR' })
+      .then(function (blob) { return JKShare.send(blob, 'jknowledge-explorer.png', 'ผมเป็นนักสำรวจพลังงานตัวจริง! 🏆⚛️ #JKnowledge'); })
+      .then(function () { busy(btn, false); })
+      .catch(function () { busy(btn, false); });
+  }
+
+  function shareSelfie() {
+    if (!window.JKShare) return;
+    var btn = $('btnSelfie');
+    busy(btn, true, '📸...');
+    JKShare.makeSelfie()
+      .then(function (blob) { return JKShare.send(blob, 'jknowledge-ar-selfie.png', 'ผมไปสำรวจโรงไฟฟ้านิวเคลียร์ AR มาแล้ว! ⚛️ #JKnowledge #นักสำรวจพลังงาน'); })
+      .then(function () { busy(btn, false); })
+      .catch(function () { busy(btn, false); });
   }
 
   // ---------- โหมดส่องข้างใน (ทำผนังโดมโปร่งใส) ----------
@@ -610,6 +688,18 @@
         $('allFound').style.display = 'none';
       });
     }
+    if ($('allFoundShare')) $('allFoundShare').addEventListener('click', function () { shareCard($('allFoundShare'), false); });
+    if ($('allFoundPassport')) $('allFoundPassport').addEventListener('click', function () {
+      $('allFound').style.display = 'none'; openPassport();
+    });
+
+    // พาสปอร์ต: แตะตัวนับ 🔍 เพื่อเปิด + ปุ่มปิด
+    if ($('discoverBadge')) $('discoverBadge').addEventListener('click', openPassport);
+    if ($('passportClose')) $('passportClose').addEventListener('click', closePassport);
+    if ($('passportShare')) $('passportShare').addEventListener('click', function () { shareCard($('passportShare'), true); });
+
+    // ถ่ายเซลฟี่ AR (เฉพาะโหมด AR)
+    if (state.arMode && $('btnSelfie')) $('btnSelfie').addEventListener('click', shareSelfie);
 
     // ย่อ / ขยาย / หมุน
     $('btnGrow').addEventListener('click', function () {
