@@ -199,6 +199,7 @@
     energyOn: false, cutawayOn: false,   // สถานะที่ผู้ใช้กดเอง
     learnOpen: false, learnStep: 0,
     poiOpen: null, arMode: false, tapHintShown: false,
+    decorOn: true,
     discovered: {}, discoverCount: 0, allFoundShown: false,
     quizIndex: 0, quizScore: 0, quizAnswered: false
   };
@@ -240,6 +241,15 @@
     });
     if (ribs) ribs.setAttribute('visible', !on);
     var btn = $('btnCutaway');
+    if (btn) btn.classList.toggle('on', on);
+  }
+
+  // ---------- รายละเอียดพื้นที่ (รั้ว/ต้นไม้/รถ/คน...) — ปิดได้เพื่อ FPS ---------
+  function applyDecor(on) {
+    document.querySelectorAll('.decor').forEach(function (el) {
+      el.setAttribute('visible', on);
+    });
+    var btn = $('btnDecor');
     if (btn) btn.classList.toggle('on', on);
   }
 
@@ -566,6 +576,22 @@
     state.arMode = !!opts.arMode;
     var plant = $('plant');
 
+    // จำกัด pixel ratio บนจอ DPI สูง (มือถือบางรุ่น DPR 3) เพื่อให้ลื่นขึ้นมาก
+    // AR: 1.5 (ภาพจากกล้องกลบความคมอยู่แล้ว = ได้ FPS คุ้มกว่า) / โหมด 3D: 2
+    (function () {
+      var scene = document.querySelector('a-scene');
+      var CAP = state.arMode ? 1.5 : 2;
+      function capPR() {
+        if (scene && scene.renderer) {
+          scene.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, CAP));
+        }
+      }
+      if (scene.hasLoaded) capPR(); else scene.addEventListener('loaded', capPR);
+      // AR.js อาจ re-init renderer ตอนกล้องเริ่มทำงาน — ตอกย้ำ cap อีกครั้งหลังโหลด
+      setTimeout(capPR, 1500);
+      var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(capPR, 250); });
+    })();
+
     // แตะอาคารเพื่อดูการ์ดความรู้
     initTapExplore();
     if (state.arMode) initPinchScale();   // AR: บีบนิ้วเพื่อย่อ/ขยายโมเดล
@@ -608,6 +634,15 @@
       state.cutawayOn = !state.cutawayOn;
       applyCutaway(state.cutawayOn);
     });
+
+    // สลับรายละเอียดพื้นที่ (ปิดเพื่อเพิ่ม FPS บนมือถือช้า) — เริ่มต้นเปิดเต็ม
+    if ($('btnDecor')) {
+      applyDecor(state.decorOn);
+      $('btnDecor').addEventListener('click', function () {
+        state.decorOn = !state.decorOn;
+        applyDecor(state.decorOn);
+      });
+    }
 
     // โหมดเรียนรู้
     $('btnLearn').addEventListener('click', openLearn);

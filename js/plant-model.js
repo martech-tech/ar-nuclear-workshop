@@ -40,7 +40,7 @@
   // ต้นไม้ (พุ่ม 2 ชั้น)
   function tree(x, z, s, shade) {
     s = s || 1; shade = shade || '#2e7d32';
-    return '<a-entity position="' + x + ' 0 ' + z + '" scale="' + s + ' ' + s + ' ' + s + '">' +
+    return '<a-entity class="decor" position="' + x + ' 0 ' + z + '" scale="' + s + ' ' + s + ' ' + s + '">' +
       '<a-cylinder position="0 0.05 0" radius="0.018" height="0.1" color="#7a4f28"></a-cylinder>' +
       '<a-cone position="0 0.16 0" radius-bottom="0.095" radius-top="0.03" height="0.16" color="' + shade + '"></a-cone>' +
       '<a-cone position="0 0.27 0" radius-bottom="0.065" radius-top="0" height="0.13" color="#43a047"></a-cone>' +
@@ -108,7 +108,7 @@
 
   // เสาไฟถนน
   function streetlight(x, z, rotY) {
-    return '<a-entity position="' + x + ' 0 ' + z + '" rotation="0 ' + (rotY || 0) + ' 0">' +
+    return '<a-entity class="decor" position="' + x + ' 0 ' + z + '" rotation="0 ' + (rotY || 0) + ' 0">' +
       '<a-cylinder position="0 0.07 0" radius="0.0045" height="0.14" color="#5d666d"></a-cylinder>' +
       '<a-box position="0.02 0.138 0" width="0.04" height="0.006" depth="0.006" color="#5d666d"></a-box>' +
       '<a-sphere position="0.038 0.134 0" radius="0.011" material="color: #fff2b0; emissive: #ffe98a; emissiveIntensity: 0.9"></a-sphere>' +
@@ -117,7 +117,7 @@
 
   // ถังเก็บน้ำ/เชื้อเพลิงสำรอง
   function tank(x, z) {
-    return '<a-entity position="' + x + ' 0 ' + z + '">' +
+    return '<a-entity class="decor" position="' + x + ' 0 ' + z + '">' +
       '<a-cylinder position="0 0.055 0" radius="0.05" height="0.11" color="#f2f4f5"></a-cylinder>' +
       '<a-cylinder position="0 0.113 0" radius="0.051" height="0.008" color="#9aa2a9"></a-cylinder>' +
       '<a-cylinder position="0.058 0.03 0" radius="0.006" height="0.06" color="#9aa2a9"></a-cylinder>' +
@@ -127,7 +127,7 @@
 
   // คนตัวจิ๋ว (เสื้อสีต่างกัน)
   function person(x, z, shirt) {
-    return '<a-entity position="' + x + ' 0 ' + z + '">' +
+    return '<a-entity class="decor" position="' + x + ' 0 ' + z + '">' +
       '<a-cylinder position="0 0.016 0" radius="0.011" height="0.032" color="' + shirt + '"></a-cylinder>' +
       '<a-sphere position="0 0.041 0" radius="0.0095" color="#f0c8a0"></a-sphere>' +
       '</a-entity>';
@@ -135,13 +135,13 @@
 
   // พุ่มไม้กลม
   function bush(x, z, s) {
-    return '<a-sphere position="' + x + ' 0.022 ' + z + '" radius="0.028" scale="1 0.75 1" color="' +
+    return '<a-sphere class="decor" position="' + x + ' 0.022 ' + z + '" radius="0.028" scale="1 0.75 1" color="' +
       (s ? '#43a047' : '#2e7d32') + '"></a-sphere>';
   }
 
   // ทางเดินเท้า (แผ่นราบ)
   function walkway(x, z, w, d) {
-    return '<a-plane position="' + x + ' 0.0065 ' + z + '" rotation="-90 0 0" width="' + w + '" height="' + d + '" color="#d8dcdf"></a-plane>';
+    return '<a-plane class="decor" position="' + x + ' 0.0065 ' + z + '" rotation="-90 0 0" width="' + w + '" height="' + d + '" color="#d8dcdf"></a-plane>';
   }
 
   // หมุดสีเหลืองกะพริบ บอกจุดที่แตะได้ (คลาส plantLabel ทำให้ซ่อนอัตโนมัติตอนการ์ดเปิด)
@@ -162,7 +162,7 @@
 
   // รถยนต์คันจิ๋ว
   function car(x, z, color, rotY) {
-    return '<a-entity position="' + x + ' 0 ' + z + '" rotation="0 ' + (rotY || 0) + ' 0">' +
+    return '<a-entity class="decor" position="' + x + ' 0 ' + z + '" rotation="0 ' + (rotY || 0) + ' 0">' +
       '<a-box position="0 0.022 0" width="0.075" height="0.026" depth="0.04" color="' + color + '"></a-box>' +
       '<a-box position="-0.005 0.048 0" width="0.04" height="0.022" depth="0.036" color="#dfe8ee"></a-box>' +
       '<a-cylinder position="-0.024 0.01 0.02"  rotation="90 0 0" radius="0.01" height="0.008" color="#222"></a-cylinder>' +
@@ -319,7 +319,7 @@
     '<a-entity class="plantLabel" thai-label="text: ลานหม้อแปลง; icon: ⚡; width: 0.46; accent: #f2a51a" billboard position="-0.05 0.62 0.63"></a-entity>' +
 
     // ===== รั้วรอบพื้นที่ (เว้นช่องประตูทางเข้าที่ถนนด้านใต้) =====
-    '<a-entity id="siteFence">' +
+    '<a-entity id="siteFence" class="decor">' +
       fenceRun(-1.05, -0.9, 1.0, -0.9, false) +     // เหนือ
       fenceRun(1.0, -0.9, 1.0, 1.02, true) +        // ตะวันออก (ข้ามเสามุมซ้ำ)
       fenceRun(1.0, 1.02, -0.32, 1.02, true) +      // ใต้ (ขวาของประตู)

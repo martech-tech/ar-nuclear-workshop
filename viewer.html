@@ -53,6 +53,7 @@
       <button id="btnShrink" class="circle" title="ย่อ">➖</button>
       <button id="btnGrow" class="circle" title="ขยาย">➕</button>
       <button id="btnRotate" class="circle" title="หมุน">↻</button>
+      <button id="btnDecor" class="circle" title="รายละเอียดพื้นที่ (ปิดถ้ามือถือช้า)">🌳</button>
     </div>
   </div>
 
@@ -124,14 +125,14 @@
   </div>
 
   <!-- ===== ฉาก 3D ===== -->
-  <a-scene vr-mode-ui="enabled: false" renderer="colorManagement: true"
+  <a-scene vr-mode-ui="enabled: false" renderer="colorManagement: true; precision: medium; powerPreference: high-performance"
            fog="type: linear; color: #cfe6f5; near: 4.5; far: 9">
     <a-sky color="#bfe0f5"></a-sky>
     <a-circle position="0 -0.002 0" rotation="-90 0 0" radius="8" color="#6aa953"></a-circle>
 
     <a-entity id="plant" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-entity>
 
-    <a-entity camera="fov: 55" simple-orbit="target: 0 0.32 0; distance: 3.1" look-controls="enabled: false" wasd-controls="enabled: false"></a-entity>
+    <a-entity camera="fov: 55; near: 0.05; far: 30" simple-orbit="target: 0 0.32 0; distance: 3.1" look-controls="enabled: false" wasd-controls="enabled: false"></a-entity>
   </a-scene>
 
   <script src="js/ui.js"></script>

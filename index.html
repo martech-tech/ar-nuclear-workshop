@@ -63,6 +63,7 @@
       <button id="btnShrink" class="circle" title="ย่อ">➖</button>
       <button id="btnGrow" class="circle" title="ขยาย">➕</button>
       <button id="btnRotate" class="circle" title="หมุน">↻</button>
+      <button id="btnDecor" class="circle" title="รายละเอียดพื้นที่ (ปิดถ้ามือถือช้า)">🌳</button>
     </div>
   </div>
 
@@ -137,8 +138,8 @@
   <a-scene
     embedded
     vr-mode-ui="enabled: false"
-    renderer="logarithmicDepthBuffer: true; precision: medium"
-    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono;">
+    renderer="logarithmicDepthBuffer: true; precision: medium; powerPreference: high-performance"
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; sourceWidth: 640; sourceHeight: 480; maxDetectionRate: 30;">
 
     <a-marker id="marker" preset="hiro" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
       <a-entity id="plant" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-entity>
