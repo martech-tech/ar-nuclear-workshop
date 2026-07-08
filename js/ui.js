@@ -285,28 +285,24 @@
     else { btn.textContent = btn.dataset.txt || btn.textContent; btn.disabled = false; }
   }
 
+  // หมายเหตุ: เรียก JKShare.* แบบ synchronous ทันที (ห้ามมี await ก่อนถึง navigator.share
+  // ไม่งั้น iOS จะไม่เปิด share sheet) — busy() แค่ปรับหน้าตาปุ่ม ไม่กระทบ activation
   function shareCard(btn, fromPassport) {
     if (!window.JKShare) return;
     if (!btn || !btn.tagName) btn = $('allFoundShare');
     var name = ($('allFoundName') && $('allFoundName').value || '').trim().slice(0, 30);
     // ถ้าเปิดจากพาสปอร์ตและสถานีนี้ผ่านแล้ว ให้การ์ดเป็น 10/10 (session อาจนับใหม่เป็น 0)
     var pts = (fromPassport && getStamps().nuclear) ? DISCOVER_TOTAL : state.discoverCount;
-    busy(btn, true, '📸 กำลังสร้างการ์ด...');
-    JKShare.makeCard({ name: name, points: pts, total: DISCOVER_TOTAL,
-                       stationName: 'โรงไฟฟ้านิวเคลียร์ AR' })
-      .then(function (blob) { return JKShare.send(blob, 'jknowledge-explorer.png', 'ผมเป็นนักสำรวจพลังงานตัวจริง! 🏆⚛️ #JKnowledge'); })
-      .then(function () { busy(btn, false); })
-      .catch(function () { busy(btn, false); });
+    busy(btn, true, '📸 กำลังแชร์...');
+    JKShare.shareCard({ name: name, points: pts, total: DISCOVER_TOTAL, stationName: 'โรงไฟฟ้านิวเคลียร์ AR' })
+      .then(function () { busy(btn, false); }, function () { busy(btn, false); });
   }
 
   function shareSelfie() {
     if (!window.JKShare) return;
     var btn = $('btnSelfie');
     busy(btn, true, '📸...');
-    JKShare.makeSelfie()
-      .then(function (blob) { return JKShare.send(blob, 'jknowledge-ar-selfie.png', 'ผมไปสำรวจโรงไฟฟ้านิวเคลียร์ AR มาแล้ว! ⚛️ #JKnowledge #นักสำรวจพลังงาน'); })
-      .then(function () { busy(btn, false); })
-      .catch(function () { busy(btn, false); });
+    JKShare.shareSelfie().then(function () { busy(btn, false); }, function () { busy(btn, false); });
   }
 
   // ---------- โหมดส่องข้างใน (ทำผนังโดมโปร่งใส) ----------
