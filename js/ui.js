@@ -201,7 +201,8 @@
     poiOpen: null, arMode: false, tapHintShown: false,
     decorOn: true,
     discovered: {}, discoverCount: 0, allFoundShown: false,
-    quizIndex: 0, quizScore: 0, quizAnswered: false
+    exploreStart: 0, exploreTime: 0,   // จับเวลาล่าครบ 10 จุด (ท้าเพื่อนทำลายสถิติ)
+    quizIndex: 0, quizScore: 0, quizAnswered: false, quizBest: 0
   };
 
   var DISCOVER_TOTAL = Object.keys(POI).length;   // จำนวนจุดทั้งหมด (= 10)
@@ -220,14 +221,31 @@
     badge.classList.toggle('complete', state.discoverCount >= DISCOVER_TOTAL);
   }
 
+  function fmtTime(ms) {
+    var s = Math.round(ms / 1000);
+    return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+  }
+
+  // ฉายาตามผลงาน (ควิซ + ล่าครบ) — ยิ่งเก่ง ฉายายิ่งเท่ ยิ่งอยากอวด
+  function earnTitle() {
+    if (state.quizBest >= QUIZ.length) return 'สุดยอดนักฟิสิกส์จูเนียร์';
+    if (state.quizBest >= Math.ceil(QUIZ.length * 0.7)) return 'นักสำรวจพลังงานขั้นเทพ';
+    return 'นักสำรวจพลังงานตัวจริง';
+  }
+
   function markDiscovered(id) {
     if (state.discovered[id]) return;
+    if (state.discoverCount === 0) state.exploreStart = Date.now();   // เริ่มจับเวลาที่จุดแรก
     state.discovered[id] = true;
     state.discoverCount++;
     updateDiscoverBadge();
     if (state.discoverCount >= DISCOVER_TOTAL && !state.allFoundShown) {
       state.allFoundShown = true;
+      state.exploreTime = state.exploreStart ? Date.now() - state.exploreStart : 0;
       stampStation('nuclear');   // ประทับตราสถานีนี้ลงพาสปอร์ต
+      if ($('allFoundTime') && state.exploreTime > 0) {
+        $('allFoundTime').textContent = '⏱ ล่าครบ 10 จุดใน ' + fmtTime(state.exploreTime) + ' นาที!';
+      }
       setTimeout(function () { $('allFound').style.display = 'flex'; }, 500);
     }
   }
@@ -293,12 +311,14 @@
     if (shareCtx && shareCtx.url) URL.revokeObjectURL(shareCtx.url);
     var isSelfie = kind === 'selfie';
     var url = URL.createObjectURL(blob);
+    var timePart = state.exploreTime > 0 ? ' ล่าครบ 10 จุดใน ' + fmtTime(state.exploreTime) + ' นาที — ใครว่าแน่มาทำลายสถิติสิ! 😎' : '';
     shareCtx = {
       blob: blob, url: url,
       filename: isSelfie ? 'jknowledge-ar-selfie.png' : 'jknowledge-explorer.png',
       text: (isSelfie
-        ? 'ผมไปสำรวจโรงไฟฟ้านิวเคลียร์ AR มาแล้ว! ⚛️'
-        : 'ผมเป็นนักสำรวจพลังงานตัวจริง! 🏆⚛️') + '  #JKnowledge #นักสำรวจพลังงาน  jknowledgetutor.com'
+        ? 'ไปสำรวจโรงไฟฟ้านิวเคลียร์ AR มาแล้ว! ⚛️'
+        : 'ได้ฉายา "' + earnTitle() + '" จากภารกิจโรงไฟฟ้านิวเคลียร์ AR! 🏆⚛️') +
+        timePart + '  #JKnowledge #นักสำรวจพลังงาน  jknowledgetutor.com'
     };
     $('shareResultImg').src = url;
     $('shareResult').style.display = 'flex';
@@ -310,12 +330,47 @@
     shareCtx = null;
   }
 
+  // ป้ายแจ้งสั้นๆ ในหน้าพรีวิวรูป
+  var srToastTimer = null;
+  function srToast(msg) {
+    var t = $('srToastBox');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'srToastBox';
+      var card = document.querySelector('#shareResult .card');
+      if (!card) return;
+      card.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.display = 'block';
+    clearTimeout(srToastTimer);
+    srToastTimer = setTimeout(function () { t.style.display = 'none'; }, 2200);
+  }
+
+  // คัดลอกข้อความ (มี fallback สำหรับเบราว์เซอร์เก่า)
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(function () {});
+      return;
+    }
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+  }
+
   // สร้างการ์ด/เซลฟี่ (ตอนแตะปุ่ม) แล้วเปิดหน้าพรีวิว
   function makeCardResult(fromPassport) {
     if (!window.JKShare) return;
     var name = ($('allFoundName') && $('allFoundName').value || '').trim().slice(0, 30);
     var pts = (fromPassport && getStamps().nuclear) ? DISCOVER_TOTAL : state.discoverCount;
-    var blob = JKShare.card({ name: name, points: pts, total: DISCOVER_TOTAL, stationName: 'โรงไฟฟ้านิวเคลียร์ AR' });
+    var blob = JKShare.card({
+      name: name, points: pts, total: DISCOVER_TOTAL,
+      stationName: 'โรงไฟฟ้านิวเคลียร์ AR',
+      title: earnTitle() + '!',
+      timeText: state.exploreTime > 0 ? fmtTime(state.exploreTime) : ''
+    });
     openShareResult(blob, 'card');
   }
   function makeSelfieResult() {
@@ -516,6 +571,25 @@
     var ndc = new THREE.Vector2();
     var downPos = null, downTime = 0, lastTouchEnd = 0;
 
+    var pinWorld = new THREE.Vector3();
+
+    // หมุดที่ "มองเห็นบนจอ" ใกล้จุดแตะที่สุดภายในรัศมี — นิ้วเด็กแตะไม่แม่น
+    // การเล็งที่หมุด (เป้าที่เด่นสุด) ต้องชนะ raycast ที่อาจทะลุไปโดนอาคารข้างหลัง
+    function nearestPin(x, y, camera, rect) {
+      var best = null, bestD = 44;   // รัศมี ~44 CSS px
+      document.querySelectorAll('.tapPin').forEach(function (el) {
+        if (!el.object3D || !el.object3D.visible || !el.dataset.poi) return;
+        el.object3D.getWorldPosition(pinWorld);
+        pinWorld.project(camera);
+        if (pinWorld.z > 1 || pinWorld.z < -1) return;   // อยู่นอกระยะกล้อง
+        var sx = rect.left + (pinWorld.x + 1) / 2 * rect.width;
+        var sy = rect.top + (1 - pinWorld.y) / 2 * rect.height;
+        var d = Math.hypot(sx - x, sy - y);
+        if (d < bestD) { bestD = d; best = el.dataset.poi; }
+      });
+      return best;
+    }
+
     function onTap(x, y) {
       // ระหว่างโหมดเรียนรู้/ควิซ ไม่รับการแตะอาคาร
       if (state.learnOpen || $('quizPanel').style.display === 'flex') return;
@@ -527,6 +601,12 @@
       var camera = sceneEl.camera;
       if (!camera) return;
       var rect = sceneEl.canvas.getBoundingClientRect();
+
+      // ชั้นที่ 1: แตะใกล้หมุดสีเหลือง → เปิดจุดนั้นเลย
+      var pinPoi = nearestPin(x, y, camera, rect);
+      if (pinPoi) { openPoi(pinPoi); return; }
+
+      // ชั้นที่ 2: raycast กล่องอาคาร
       ndc.x = ((x - rect.left) / rect.width) * 2 - 1;
       ndc.y = -((y - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(ndc, camera);
@@ -641,6 +721,7 @@
 
   function renderQuizResult() {
     var s = state.quizScore, n = QUIZ.length;
+    state.quizBest = Math.max(state.quizBest, s);   // เก็บสถิติดีสุด → ใช้คำนวณฉายาบนการ์ด
     var stars = s > 0 ? '⭐'.repeat(s) : '💪';   // 0 คะแนนต้องไม่โชว์ดาว (ใบงานให้ระบายดาวตามคะแนนจริง)
     var msg = s === n ? 'สุดยอดนักวิทยาศาสตร์ตัวจริง!'
             : s >= Math.ceil(n * 0.7) ? 'เก่งมาก! เกือบเต็มแล้ว'   // เกณฑ์อิงจำนวนข้อจริง (8 ข้อ = 6+)
@@ -715,14 +796,31 @@
     // ถ่ายเซลฟี่ AR (เฉพาะโหมด AR)
     if (state.arMode && $('btnSelfie')) $('btnSelfie').addEventListener('click', makeSelfieResult);
 
-    // หน้าพรีวิวรูป: แชร์ / บันทึก / ปิด
+    // หน้าพรีวิวรูป: แชร์ / บันทึก / คัดลอกแคปชั่น / ปิด
     if ($('shareResultClose')) $('shareResultClose').addEventListener('click', closeShareResult);
     if ($('shareResultShare')) $('shareResultShare').addEventListener('click', function () {
       if (shareCtx) JKShare.share(shareCtx.blob, shareCtx.filename, shareCtx.text);
     });
     if ($('shareResultSave')) $('shareResultSave').addEventListener('click', function () {
       if (shareCtx) JKShare.save(shareCtx.blob, shareCtx.filename);
+      srToast('บันทึกรูปแล้ว ✅ อย่าลืมคัดลอกแคปชั่นไปวางตอนโพสต์');
     });
+    if ($('shareResultCopy')) $('shareResultCopy').addEventListener('click', function () {
+      if (!shareCtx) return;
+      copyText(shareCtx.text);
+      srToast('คัดลอกแคปชั่นแล้ว 📋 ไปวางในโพสต์ได้เลย');
+    });
+
+    // เปิดจาก in-app browser (LINE/Facebook/IG/Messenger) — กล้อง/แชร์มักโดนจำกัด → แนะให้เปิดเบราว์เซอร์จริง
+    (function () {
+      var ua = navigator.userAgent || '';
+      if (!/Line\/|FBAV|FBAN|FB_IAB|Instagram|MessengerForiOS/i.test(ua)) return;
+      var tip = document.createElement('div');
+      tip.id = 'iabTip';
+      tip.innerHTML = '⚠️ กำลังเปิดในแอป — กล้อง/ปุ่มแชร์อาจไม่ทำงาน<br>แตะเมนู <b>⋯</b> แล้วเลือก <b>"เปิดในเบราว์เซอร์"</b> จะใช้ได้เต็มที่ <button id="iabTipClose">✕</button>';
+      document.body.appendChild(tip);
+      document.getElementById('iabTipClose').addEventListener('click', function () { tip.remove(); });
+    })();
 
     // ย่อ / ขยาย / หมุน
     $('btnGrow').addEventListener('click', function () {

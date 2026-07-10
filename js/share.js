@@ -91,7 +91,7 @@
 
     drawLogos(ctx, W / 2, 70, 96);
     centerText(ctx, '🏆', W / 2, 380, '190px sans-serif', '#fff', false);
-    centerFit(ctx, 'นักสำรวจพลังงานตัวจริง!', W / 2, 560, W - 130, 76, 'bold', BRAND.gold, true);
+    centerFit(ctx, (opts.title || 'นักสำรวจพลังงานตัวจริง!'), W / 2, 560, W - 130, 76, 'bold', BRAND.gold, true);
     if (opts.name) centerFit(ctx, '“' + opts.name + '”', W / 2, 660, W - 160, 60, 'bold', '#fff', true);
 
     var n = opts.points != null ? opts.points : 10, tot = opts.total || 10;
@@ -100,12 +100,17 @@
 
     var stars = '';
     for (var s = 0; s < tot; s++) stars += (s < n ? '★' : '☆');
-    centerText(ctx, stars, W / 2, 920, '54px sans-serif', BRAND.gold, false);
+    centerText(ctx, stars, W / 2, 905, '54px sans-serif', BRAND.gold, false);
+
+    // เวลาแข่ง — ตัวจุดประกาย "ท้าเพื่อน" ให้เกิดการแชร์ต่อ
+    if (opts.timeText) {
+      centerFit(ctx, '⏱ ล่าครบใน ' + opts.timeText + ' นาที — แน่จริงมาทำลายสถิติสิ!', W / 2, 968, W - 120, 40, 'bold', '#ffffff', true);
+    }
 
     ctx.fillStyle = 'rgba(255,255,255,.1)';
-    roundRect(ctx, W / 2 - 380, 1000, 760, 120, 24); ctx.fill();
-    centerText(ctx, 'มาลองเล่น AR วิทยาศาสตร์กับ JKnowledge', W / 2, 1044, '40px sans-serif', '#fff', false);
-    centerText(ctx, 'สแกน QR ที่บูธ แล้วสำรวจให้ครบทุกจุด!', W / 2, 1092, '36px sans-serif', '#bcd3ea', false);
+    roundRect(ctx, W / 2 - 380, 1005, 760, 118, 24); ctx.fill();
+    centerText(ctx, 'มาลองเล่น AR วิทยาศาสตร์กับ JKnowledge', W / 2, 1048, '40px sans-serif', '#fff', false);
+    centerText(ctx, 'สแกน QR ที่บูธ แล้วสำรวจให้ครบทุกจุด!', W / 2, 1094, '36px sans-serif', '#bcd3ea', false);
 
     centerFit(ctx, BRAND.hashtag, W / 2, 1220, W - 90, 38, 'bold', BRAND.gold, false);
     centerText(ctx, BRAND.site, W / 2, 1275, '34px sans-serif', '#9fd0ff', false);

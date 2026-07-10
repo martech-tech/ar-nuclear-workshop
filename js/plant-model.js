@@ -145,9 +145,10 @@
   }
 
   // หมุดสีเหลืองกะพริบ บอกจุดที่แตะได้ (คลาส plantLabel ทำให้ซ่อนอัตโนมัติตอนการ์ดเปิด)
-  function tapPin(x, y, z) {
-    return '<a-entity class="plantLabel" position="' + x + ' ' + y + ' ' + z + '">' +
-      '<a-sphere radius="0.02" material="color: #ffd23d; emissive: #ffb800; emissiveIntensity: 0.8"' +
+  // data-poi ทำให้หมุดเป็น "เป้าแตะ" โดยตรง — ui.js เช็คระยะบนจอก่อน raycast
+  function tapPin(x, y, z, poi) {
+    return '<a-entity class="plantLabel tapPin" data-poi="' + poi + '" position="' + x + ' ' + y + ' ' + z + '">' +
+      '<a-sphere radius="0.022" material="color: #ffd23d; emissive: #ffb800; emissiveIntensity: 0.8"' +
       ' animation__bob="property: position; from: 0 0 0; to: 0 0.045 0; dir: alternate; dur: 700; loop: true; easing: easeInOutQuad"' +
       ' animation__pulse="property: scale; from: 0.8 0.8 0.8; to: 1.25 1.25 1.25; dir: alternate; dur: 700; loop: true; easing: easeInOutSine"></a-sphere>' +
       '</a-entity>';
@@ -383,21 +384,22 @@
       hitBox('cooling',     0.66, 0.45,  0.34, 0.72, 0.95, 0.6) +
       hitBox('turbine',     0.0,  0.16, -0.52, 1.2,  0.4,  0.44) +
       hitBox('switchyard', -0.05, 0.2,   0.63, 0.5,  0.42, 0.34) +
-      hitBox('pond',        0.52, 0.06,  0.82, 0.58, 0.14, 0.58) +
-      hitBox('stack',      -0.88, 0.36, -0.3,  0.16, 0.78, 0.16) +
-      hitBox('admin',      -0.78, 0.1,   0.3,  0.26, 0.24, 0.22) +
-      hitBox('fuel',       -0.24, 0.14,  0.28, 0.32, 0.28, 0.28) +
-      hitBox('helipad',     0.45, 0.08, -0.78, 0.2,  0.16, 0.18) +
-      hitBox('gate',       -0.36, 0.06,  0.97, 0.28, 0.13, 0.16) +
+      // กล่องจุดรอง: สูงพอคลุม "ยอดหมุดตอนเด้งสูงสุด" (+0.045+r) — แตะที่หมุดต้องโดนกล่องตัวเอง
+      hitBox('pond',        0.52, 0.1,   0.82, 0.58, 0.22, 0.58) +
+      hitBox('stack',      -0.88, 0.42, -0.3,  0.16, 0.9,  0.16) +
+      hitBox('admin',      -0.78, 0.14,  0.3,  0.26, 0.32, 0.22) +
+      hitBox('fuel',       -0.24, 0.17,  0.28, 0.32, 0.36, 0.28) +
+      hitBox('helipad',     0.45, 0.11, -0.78, 0.2,  0.24, 0.18) +
+      hitBox('gate',       -0.36, 0.09,  0.97, 0.28, 0.2,  0.16) +
     '</a-entity>' +
 
-    // ===== หมุดบอกจุดแตะ (จุดรองที่ไม่มีป้ายใหญ่) — y อยู่ในกล่อง hitbox เพื่อให้แตะโดนแน่ =====
-    tapPin(-0.24, 0.24, 0.28) +   // อาคารเชื้อเพลิง
-    tapPin(0.52, 0.1, 0.82) +     // บ่อพักน้ำ
-    tapPin(-0.88, 0.7, -0.3) +    // ปล่องระบายอากาศ
-    tapPin(-0.78, 0.18, 0.3) +    // อาคารสำนักงาน
-    tapPin(0.45, 0.13, -0.78) +   // ลานเฮลิคอปเตอร์
-    tapPin(-0.33, 0.1, 0.97) +    // ป้อมยาม
+    // ===== หมุดบอกจุดแตะ (จุดรองที่ไม่มีป้ายใหญ่) =====
+    tapPin(-0.24, 0.24, 0.28, 'fuel') +
+    tapPin(0.52, 0.1, 0.82, 'pond') +
+    tapPin(-0.88, 0.7, -0.3, 'stack') +
+    tapPin(-0.78, 0.18, 0.3, 'admin') +
+    tapPin(0.45, 0.13, -0.78, 'helipad') +
+    tapPin(-0.33, 0.1, 0.97, 'gate') +
 
     // ===== ลูกศรไฮไลต์ (โหมดเรียนรู้) =====
     '<a-entity id="stepMarker" visible="false">' +
