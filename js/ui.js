@@ -285,24 +285,42 @@
     else { btn.textContent = btn.dataset.txt || btn.textContent; btn.disabled = false; }
   }
 
-  // หมายเหตุ: เรียก JKShare.* แบบ synchronous ทันที (ห้ามมี await ก่อนถึง navigator.share
-  // ไม่งั้น iOS จะไม่เปิด share sheet) — busy() แค่ปรับหน้าตาปุ่ม ไม่กระทบ activation
-  function shareCard(btn, fromPassport) {
-    if (!window.JKShare) return;
-    if (!btn || !btn.tagName) btn = $('allFoundShare');
-    var name = ($('allFoundName') && $('allFoundName').value || '').trim().slice(0, 30);
-    // ถ้าเปิดจากพาสปอร์ตและสถานีนี้ผ่านแล้ว ให้การ์ดเป็น 10/10 (session อาจนับใหม่เป็น 0)
-    var pts = (fromPassport && getStamps().nuclear) ? DISCOVER_TOTAL : state.discoverCount;
-    busy(btn, true, '📸 กำลังแชร์...');
-    JKShare.shareCard({ name: name, points: pts, total: DISCOVER_TOTAL, stationName: 'โรงไฟฟ้านิวเคลียร์ AR' })
-      .then(function () { busy(btn, false); }, function () { busy(btn, false); });
+  // ---------- หน้าพรีวิวรูป → เลือก แชร์ (LINE/Messenger…) หรือ บันทึก (ไปโพสต์ IG/FB) ----------
+  var shareCtx = null;   // { blob, filename, text, url }
+
+  function openShareResult(blob, kind) {
+    if (!blob || !window.JKShare) return;
+    if (shareCtx && shareCtx.url) URL.revokeObjectURL(shareCtx.url);
+    var isSelfie = kind === 'selfie';
+    var url = URL.createObjectURL(blob);
+    shareCtx = {
+      blob: blob, url: url,
+      filename: isSelfie ? 'jknowledge-ar-selfie.png' : 'jknowledge-explorer.png',
+      text: (isSelfie
+        ? 'ผมไปสำรวจโรงไฟฟ้านิวเคลียร์ AR มาแล้ว! ⚛️'
+        : 'ผมเป็นนักสำรวจพลังงานตัวจริง! 🏆⚛️') + '  #JKnowledge #นักสำรวจพลังงาน  jknowledgetutor.com'
+    };
+    $('shareResultImg').src = url;
+    $('shareResult').style.display = 'flex';
   }
 
-  function shareSelfie() {
+  function closeShareResult() {
+    $('shareResult').style.display = 'none';
+    if (shareCtx && shareCtx.url) { URL.revokeObjectURL(shareCtx.url); }
+    shareCtx = null;
+  }
+
+  // สร้างการ์ด/เซลฟี่ (ตอนแตะปุ่ม) แล้วเปิดหน้าพรีวิว
+  function makeCardResult(fromPassport) {
     if (!window.JKShare) return;
-    var btn = $('btnSelfie');
-    busy(btn, true, '📸...');
-    JKShare.shareSelfie().then(function () { busy(btn, false); }, function () { busy(btn, false); });
+    var name = ($('allFoundName') && $('allFoundName').value || '').trim().slice(0, 30);
+    var pts = (fromPassport && getStamps().nuclear) ? DISCOVER_TOTAL : state.discoverCount;
+    var blob = JKShare.card({ name: name, points: pts, total: DISCOVER_TOTAL, stationName: 'โรงไฟฟ้านิวเคลียร์ AR' });
+    openShareResult(blob, 'card');
+  }
+  function makeSelfieResult() {
+    if (!window.JKShare) return;
+    openShareResult(JKShare.selfie(), 'selfie');   // จับเฟรม AR แบบ synchronous
   }
 
   // ---------- โหมดส่องข้างใน (ทำผนังโดมโปร่งใส) ----------
@@ -684,7 +702,7 @@
         $('allFound').style.display = 'none';
       });
     }
-    if ($('allFoundShare')) $('allFoundShare').addEventListener('click', function () { shareCard($('allFoundShare'), false); });
+    if ($('allFoundShare')) $('allFoundShare').addEventListener('click', function () { makeCardResult(false); });
     if ($('allFoundPassport')) $('allFoundPassport').addEventListener('click', function () {
       $('allFound').style.display = 'none'; openPassport();
     });
@@ -692,10 +710,19 @@
     // พาสปอร์ต: แตะตัวนับ 🔍 เพื่อเปิด + ปุ่มปิด
     if ($('discoverBadge')) $('discoverBadge').addEventListener('click', openPassport);
     if ($('passportClose')) $('passportClose').addEventListener('click', closePassport);
-    if ($('passportShare')) $('passportShare').addEventListener('click', function () { shareCard($('passportShare'), true); });
+    if ($('passportShare')) $('passportShare').addEventListener('click', function () { makeCardResult(true); });
 
     // ถ่ายเซลฟี่ AR (เฉพาะโหมด AR)
-    if (state.arMode && $('btnSelfie')) $('btnSelfie').addEventListener('click', shareSelfie);
+    if (state.arMode && $('btnSelfie')) $('btnSelfie').addEventListener('click', makeSelfieResult);
+
+    // หน้าพรีวิวรูป: แชร์ / บันทึก / ปิด
+    if ($('shareResultClose')) $('shareResultClose').addEventListener('click', closeShareResult);
+    if ($('shareResultShare')) $('shareResultShare').addEventListener('click', function () {
+      if (shareCtx) JKShare.share(shareCtx.blob, shareCtx.filename, shareCtx.text);
+    });
+    if ($('shareResultSave')) $('shareResultSave').addEventListener('click', function () {
+      if (shareCtx) JKShare.save(shareCtx.blob, shareCtx.filename);
+    });
 
     // ย่อ / ขยาย / หมุน
     $('btnGrow').addEventListener('click', function () {

@@ -184,23 +184,14 @@
     return Promise.resolve(download(blob, filename));
   }
 
-  // ---------- API หลัก (synchronous จนถึง share) ----------
-  var SITE_TEXT = 'jknowledgetutor.com';
-
-  function shareCard(opts) {
-    var blob = canvasToBlob(buildCard(opts));
-    return shareBlob(blob, 'jknowledge-explorer.png',
-      'ผมเป็นนักสำรวจพลังงานตัวจริง! 🏆⚛️  #JKnowledge #นักสำรวจพลังงาน  ' + SITE_TEXT);
-  }
-
-  function shareSelfie() {
-    var canvas = buildSelfie();
-    if (!canvas) return Promise.resolve('error');
-    var blob = canvasToBlob(canvas);
-    return shareBlob(blob, 'jknowledge-ar-selfie.png',
-      'ผมไปสำรวจโรงไฟฟ้านิวเคลียร์ AR มาแล้ว! ⚛️  #JKnowledge #นักสำรวจพลังงาน  ' + SITE_TEXT);
-  }
-
-  window.JKShare = { shareCard: shareCard, shareSelfie: shareSelfie };
+  // ---------- API หลัก ----------
+  // card()/selfie() สร้าง Blob (synchronous — เรียกตอนแตะปุ่มถ่าย/สร้างการ์ด)
+  // share()/save()  เรียกตอนแตะปุ่มในหน้าพรีวิว (share ต้องเรียกจากการแตะสดๆ)
+  window.JKShare = {
+    card: function (opts) { return canvasToBlob(buildCard(opts)); },
+    selfie: function () { var c = buildSelfie(); return c ? canvasToBlob(c) : null; },
+    share: shareBlob,   // (blob, filename, text) -> Promise
+    save: download      // (blob, filename)
+  };
 
 })();

@@ -211,6 +211,32 @@ a-scene canvas {
 #allFound .afConsent { font-size: .72rem; color: #8a94a0; line-height: 1.5; margin-top: 4px; }
 #passportShare { width: 100%; margin-top: 4px; }
 
+/* ===== หน้าพรีวิวรูป (แชร์/บันทึก) ===== */
+#shareResult {
+  position: fixed; inset: 0; z-index: 880; display: none;
+  background: rgba(4,16,36,.82); align-items: center; justify-content: center; padding: 16px;
+}
+#shareResult .card {
+  background: #fff; border-radius: 20px; width: min(94vw, 400px); position: relative;
+  padding: 16px 16px 14px; box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  max-height: 92vh; overflow-y: auto; text-align: center;
+}
+#shareResultClose {
+  position: absolute; top: 6px; right: 8px; z-index: 5; border: none;
+  background: rgba(255,255,255,.85); border-radius: 50%; width: 30px; height: 30px;
+  font-size: 1.05rem; cursor: pointer; color: #667;
+}
+#shareResultImg {
+  display: block; width: 100%; max-height: 56vh; object-fit: contain;
+  border-radius: 12px; background: #eef2f7; margin-bottom: 12px;
+}
+#shareResult .srBtns { display: flex; gap: 8px; }
+#shareResult .srBtns button { flex: 1; }
+#shareResult .srNote {
+  font-size: .78rem; color: #556; line-height: 1.6; margin-top: 10px;
+  background: #f2f6fb; border-radius: 10px; padding: 8px 10px;
+}
+
 /* ===== พาสปอร์ตนักสำรวจ ===== */
 #passportPanel {
   position: fixed; inset: 0; z-index: 820; display: none;
