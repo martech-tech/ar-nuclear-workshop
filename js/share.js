@@ -173,12 +173,19 @@
 
   // เรียก share sheet มาตรฐาน (เลือกลง Story/โพสต์/Messenger/LINE ฯลฯ)
   // ต้องถูกเรียกแบบ synchronous ต่อจากการแตะของผู้ใช้ → ห้ามมี await คั่นก่อนถึงตรงนี้
+  // ⚠️ iOS: ต้องส่ง "ไฟล์อย่างเดียว" — ถ้าแนบ text ไปด้วย extension ของ FB/IG
+  //   จะหยิบข้อความแล้วทิ้งรูป (บั๊กฝั่ง Apple/Meta ที่ยังไม่แก้) → แคปชั่นใช้ปุ่มคัดลอกแทน
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);   // iPadOS ปลอมตัวเป็น Mac
+  }
   function shareBlob(blob, filename, text) {
     if (!blob) return Promise.resolve('error');
     try {
       var file = new File([blob], filename, { type: 'image/png' });
       if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-        return navigator.share({ files: [file], text: text })
+        var payload = isIOS() ? { files: [file] } : { files: [file], text: text };
+        return navigator.share(payload)
           .then(function () { return 'shared'; })
           .catch(function (err) {
             if (err && err.name === 'AbortError') return 'cancel';   // ผู้ใช้ยกเลิกเอง

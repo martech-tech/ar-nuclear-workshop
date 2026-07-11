@@ -810,6 +810,11 @@
       copyText(shareCtx.text);
       srToast('คัดลอกแคปชั่นแล้ว 📋 ไปวางในโพสต์ได้เลย');
     });
+    // เปิดกล้อง Story ของ Instagram ตรงๆ (deep link) — รูปที่เพิ่งบันทึกจะอยู่ใบแรกในแกลเลอรี
+    if ($('shareResultIG')) $('shareResultIG').addEventListener('click', function () {
+      if (shareCtx) copyText(shareCtx.text);   // แถมแคปชั่นให้เลย พร้อมวาง
+      window.location.href = 'instagram://story-camera';
+    });
 
     // เปิดจาก in-app browser (LINE/Facebook/IG/Messenger) — กล้อง/แชร์มักโดนจำกัด → แนะให้เปิดเบราว์เซอร์จริง
     (function () {
