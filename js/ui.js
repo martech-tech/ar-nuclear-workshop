@@ -290,8 +290,17 @@
     $('passportGrid').innerHTML = html;
   }
 
+  var pdfQrDone = false;
   function openPassport() {
     renderPassport();
+    // QR ชุดใบงาน PDF — สร้างครั้งเดียว (ต้องเปิดจากเว็บจริง ไม่ใช่ file://)
+    if (!pdfQrDone && window.QRCode && $('passportQR') && location.protocol.indexOf('http') === 0) {
+      pdfQrDone = true;
+      new QRCode($('passportQR'), {
+        text: new URL('pdf.html', location.href).href,
+        width: 92, height: 92, correctLevel: QRCode.CorrectLevel.M
+      });
+    }
     $('passportPanel').style.display = 'flex';
   }
   function closePassport() { $('passportPanel').style.display = 'none'; }

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <title>ชุดใบงานนักสำรวจพลังงาน — JKnowledge</title>
+  <!-- เอกสารต้นฉบับสำหรับสร้าง assets/workshop-pack.pdf (พิมพ์ด้วย Edge headless)
+       ห้ามใส่เนื้อหาที่ผูกกับโดเมน deploy — PDF ถูกแจกต่อได้ทุกที่ -->
+  <style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Leelawadee UI', 'Segoe UI', Tahoma, sans-serif; color: #223; }
+    .sheet {
+      width: 210mm; height: 296mm; padding: 13mm 16mm; page-break-after: always;
+      position: relative; overflow: hidden;
+    }
+    .sheet:last-child { page-break-after: auto; }
+    .logos { display: flex; align-items: center; justify-content: center; gap: 8mm; margin-bottom: 3mm; }
+    .logos .jk { width: 16mm; height: 16mm; }
+    .logos .expo { height: 14mm; width: auto; }
+    h1 { text-align: center; font-size: 1.4rem; color: #0b2447; margin: 0 0 1mm; }
+    .badge {
+      display: block; width: fit-content; margin: 0 auto 4mm; background: #ffd93d; color: #0b2447;
+      font-weight: bold; border-radius: 20px; padding: 2px 14px; font-size: .85rem;
+    }
+    .idline { display: flex; gap: 8mm; margin: 4mm 0; font-size: .95rem; }
+    .blank { display: inline-block; border-bottom: 1.5px dotted #99a; }
+    .task {
+      border: 2px solid #dde4ec; border-radius: 12px; padding: 3.5mm 5mm; margin: 3.5mm 0;
+      font-size: .92rem; line-height: 1.65;
+    }
+    .task b.no {
+      display: inline-block; background: #19376d; color: #fff; border-radius: 50%;
+      width: 7mm; height: 7mm; text-align: center; line-height: 7mm; margin-right: 3mm; font-size: .85rem;
+    }
+    .drawbox { border: 2px dashed #b8c4d4; border-radius: 10px; height: 46mm; margin-top: 3mm; }
+    .choices span { display: inline-block; margin-right: 10mm; }
+    .orderline .slot {
+      display: inline-block; width: 9mm; border-bottom: 2px solid #19376d; text-align: center; margin-right: 2mm;
+    }
+    .starline { font-size: 1.3rem; letter-spacing: 5px; color: #bbb; }
+    .footer { position: absolute; bottom: 8mm; left: 0; right: 0; text-align: center; font-size: .75rem; color: #99a; }
+
+    h2 {
+      color: #19376d; font-size: 1.05rem; margin: 6mm 0 2mm;
+      border-left: 4px solid #ffd93d; padding-left: 3mm;
+    }
+    .ans { background: #e5f7ec; border-radius: 8px; padding: 3mm 4mm; font-size: .9rem; line-height: 1.7; }
+    .how { background: #f2f6fb; border-radius: 8px; padding: 3mm 4mm; font-size: .9rem; line-height: 1.75; }
+    .cta {
+      margin-top: 6mm; text-align: center; background: #0b2447; color: #fff;
+      border-radius: 14px; padding: 5mm;
+    }
+    .cta b { color: #ffd93d; }
+    .cta .site { color: #9fd0ff; font-size: 1rem; margin-top: 1mm; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== หน้า 1: ใบงานนักสำรวจ ===== -->
+  <div class="sheet">
+    <div class="logos">
+      <img class="jk" src="assets/logo-jk.png" alt="JKnowledge">
+      <img class="expo" src="assets/logo-expo.png" alt="Thailand University TCAS Expo">
+    </div>
+    <span class="badge">ใบงานนักสำรวจพลังงาน 🔬 · โรงไฟฟ้านิวเคลียร์ AR</span>
+    <h1>ภารกิจสำรวจโรงไฟฟ้านิวเคลียร์</h1>
+    <div class="idline">
+      <span>ชื่อ<span class="blank" style="width:52mm"></span></span>
+      <span>ชั้น<span class="blank" style="width:20mm"></span></span>
+      <span>โรงเรียน<span class="blank" style="width:42mm"></span></span>
+    </div>
+
+    <div class="task">
+      <b class="no">1</b><b>นับ &amp; ล่าให้ครบ!</b> เดินรอบโรงไฟฟ้า — มีหอหล่อเย็นกี่หอ? ______ หอ
+      แล้วแตะอาคารและจุดสีเหลืองในแอปให้ครบ (ดูตัวนับ 🔍 มุมบน) พบแล้ว ______ / 10 จุด
+    </div>
+    <div class="task">
+      <b class="no">2</b><b>ไอสีขาว</b> ที่ลอยขึ้นจากหอหล่อเย็นคืออะไร? (วงกลมคำตอบ)
+      <div class="choices" style="margin-top:2mm">
+        <span>ก. ควันพิษ</span><span>ข. ไอน้ำธรรมดา</span><span>ค. ก๊าซคาร์บอน</span>
+      </div>
+    </div>
+    <div class="task">
+      <b class="no">3</b><b>ส่องข้างใน!</b> กดปุ่ม 🔍 เพื่อมองทะลุโดม — เตาปฏิกรณ์ข้างในเป็นสีอะไร
+      แล้วอาคารโดมมีหน้าที่อะไร?<br>
+      ตอบ: <span class="blank" style="width:118mm"></span>
+    </div>
+    <div class="task">
+      <b class="no">4</b><b>เรียงลำดับพลังงาน</b> — กดปุ่ม ⚡ ดูเม็ดพลังงานวิ่ง แล้วเติมเลข 1–5 ตามลำดับ
+      <div class="orderline" style="margin-top:2mm">
+        <span class="slot">&nbsp;</span> ไอน้ำหมุนกังหัน &nbsp;&nbsp;
+        <span class="slot">&nbsp;</span> ฟิชชันให้ความร้อน &nbsp;&nbsp;
+        <span class="slot">&nbsp;</span> สายส่งพาไฟฟ้าไปบ้าน<br>
+        <span class="slot">&nbsp;</span> ต้มน้ำเป็นไอแรงดันสูง &nbsp;&nbsp;
+        <span class="slot">&nbsp;</span> หม้อแปลงเพิ่มแรงดันไฟ
+      </div>
+    </div>
+    <div class="task">
+      <b class="no">5</b><b>วาดเลย!</b> วาดโรงไฟฟ้านิวเคลียร์มุมที่ชอบที่สุด พร้อมชี้ชื่ออาคาร 1 อาคาร
+      <div class="drawbox"></div>
+    </div>
+    <div class="task">
+      <b class="no">6</b><b>ท้าควิซ!</b> กดปุ่ม ❓ ในแอป ทำควิซ 8 ข้อ ได้กี่คะแนน ระบายดาวให้ตรง
+      <div class="starline">☆ ☆ ☆ ☆ ☆ ☆ ☆ ☆</div>
+    </div>
+    <div class="footer">ชุดใบงานนักสำรวจ · โรงไฟฟ้านิวเคลียร์ AR Workshop · JKnowledge</div>
+  </div>
+
+  <!-- ===== หน้า 2: วิธีเล่น + เฉลย ===== -->
+  <div class="sheet">
+    <div class="logos">
+      <img class="jk" src="assets/logo-jk.png" alt="JKnowledge">
+      <img class="expo" src="assets/logo-expo.png" alt="Thailand University TCAS Expo">
+    </div>
+    <h1>วิธีเล่น &amp; เฉลย (สำหรับคุณครู/ผู้ปกครอง)</h1>
+
+    <h2>🎮 วิธีเล่นโรงไฟฟ้านิวเคลียร์ AR</h2>
+    <div class="how">
+      1. สแกน QR ที่บูธ/แผ่นมาร์กเกอร์ของ JKnowledge ด้วยกล้องมือถือ (iPhone ใช้ Safari, Android ใช้ Chrome)<br>
+      2. กด "เริ่มสำรวจ" อนุญาตกล้อง แล้วเล็งไปที่รูปมาร์กเกอร์ — โรงไฟฟ้า 3 มิติจะโผล่บนกระดาษ เดินดูรอบๆ ได้จริง<br>
+      3. แตะอาคารและจุดสีเหลืองให้ครบ 10 จุด · กด 🔍 ส่องในเตาปฏิกรณ์ · กด ⚡ ดูเส้นทางพลังงาน · กด 📖 เรียนทีละขั้น · กด ❓ ทำควิซ<br>
+      4. ครบ 10 จุดรับ<b>การ์ดนักสำรวจ</b> ใส่ชื่อ-แชร์อวดเพื่อนได้ และสะสมตราใน<b>พาสปอร์ตนักสำรวจ</b>
+    </div>
+
+    <h2>✅ เฉลยใบงาน</h2>
+    <div class="ans">
+      <b>ข้อ 1:</b> หอหล่อเย็น <b>2</b> หอ · จุดสำรวจครบ <b>10/10</b><br>
+      <b>ข้อ 2:</b> ข. ไอน้ำธรรมดา (ไม่ใช่ควันพิษ และแทบไม่มีคาร์บอน)<br>
+      <b>ข้อ 3:</b> เตาปฏิกรณ์สีส้ม · โดมคอนกรีตหนากว่า 1 เมตร ครอบป้องกันเตาปฏิกรณ์<br>
+      <b>ข้อ 4:</b> ฟิชชันให้ความร้อน (1) → ต้มน้ำเป็นไอแรงดันสูง (2) → ไอน้ำหมุนกังหัน (3) → หม้อแปลงเพิ่มแรงดันไฟ (4) → สายส่งพาไฟฟ้าไปบ้าน (5)<br>
+      <b>เฉลยควิซ 8 ข้อ:</b> ไอน้ำธรรมดา · ฟิชชัน · ครอบเตาปฏิกรณ์ · แทบไม่ปล่อยเลย · กังหันไอน้ำ ·
+      ดูดซับนิวตรอน (เบรกปฏิกิริยา) · ไม่เดือดเพราะความดันสูง · แรงดันสูงเพื่อลดการสูญเสีย
+    </div>
+
+    <h2>💡 เกร็ดชวนคุยต่อที่บ้าน/ห้องเรียน</h2>
+    <div class="how">
+      · เม็ดเชื้อเพลิงยูเรเนียมเท่าลูกอม 1 เม็ด ให้พลังงานเท่าถ่านหินเกือบ 1 ตัน<br>
+      · หอหล่อเย็นจริงสูง ~150 เมตร (ตึก 40 ชั้น) ทรงเอวคอดช่วยให้ลมไหลเองโดยไม่ใช้พัดลม<br>
+      · เชื้อเพลิงใช้แล้วแช่น้ำจะเรืองแสงสีฟ้า เรียกว่า "แสงเชเรนคอฟ"<br>
+      · ชวนคิด: ทำไมโรงไฟฟ้าต้องอยู่ใกล้แหล่งน้ำ? นิวเคลียร์ vs โซลาร์ ต่างกันอย่างไร?
+    </div>
+
+    <div class="cta">
+      <b>อยากให้ลูก/นักเรียนสนุกกับวิทยาศาสตร์แบบนี้อีก?</b><br>
+      ติดตามเวิร์กช็อปและค่ายของ JKnowledge — ติว ติด พิชิตฝัน<br>
+      <div class="site">jknowledgetutor.com · #JKnowledge #นักสำรวจพลังงาน</div>
+    </div>
+    <div class="footer">© JKnowledge · Thailand University TCAS Expo · แจกจ่ายเพื่อการศึกษาได้</div>
+  </div>
+
+</body>
+</html>

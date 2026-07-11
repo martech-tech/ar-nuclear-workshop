@@ -18,6 +18,7 @@ WebAR เพื่อการศึกษาสำหรับน้องๆ (
 - 🏷️ **โลโก้ JKnowledge + Thailand University TCAS Expo** ชัดเจนทุกหน้า (จอ AR, จอ 3D, แผ่นพิมพ์, คู่มือ)
 - 🖥️ **โหมด 3D สำรอง** (viewer.html) — ใช้เมื่อไม่มีมาร์กเกอร์/กล้อง หรือฉายโปรเจคเตอร์หน้าห้อง
 - 🖨️ **ชุดพิมพ์** — แผ่นมาร์กเกอร์+QR และใบงานนักสำรวจ (print.html) + คู่มือผู้จัดกิจกรรม (workshop.html)
+- 📄 **QR โหลดใบงาน PDF อัตโนมัติ** — สแกนแล้วเปิด `pdf.html` ซึ่งเด้งดาวน์โหลด `assets/workshop-pack.pdf` (ใบงาน+เฉลย+วิธีเล่น 2 หน้า) ทันที · QR อยู่ในแผงพาสปอร์ตของแอป, ท้ายใบงานพิมพ์ และคู่มือผู้จัด · แก้เนื้อหาที่ `pack.html` แล้ว regenerate ด้วย `msedge --headless=new --no-pdf-header-footer --print-to-pdf="assets\workshop-pack.pdf" pack.html`
 
 ## ไฟล์ในโปรเจกต์
 

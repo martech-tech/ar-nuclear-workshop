@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/assets/workshop-pack.pdf",
+      "headers": [
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"JKnowledge-workshop-pack.pdf\""
+        }
+      ]
+    }
+  ]
+}

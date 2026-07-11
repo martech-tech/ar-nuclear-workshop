@@ -167,6 +167,15 @@
       <div class="starline">☆ ☆ ☆ ☆ ☆ ☆ ☆ ☆</div>
     </div>
 
+    <!-- QR รับชุดใบงาน+เฉลยเป็น PDF (ดาวน์โหลดอัตโนมัติ) -->
+    <div style="display:flex; align-items:center; justify-content:center; gap:5mm; margin-top:4mm;">
+      <div id="pdfQr" style="padding:2mm; border:2px dashed #19376d; border-radius:6px;"></div>
+      <div style="text-align:left; font-size:.85rem; color:#445; line-height:1.6; max-width:70mm;">
+        <b>📄 สแกนรับชุดใบงาน + เฉลย (PDF)</b><br>
+        โหลดอัตโนมัติ เก็บไว้พิมพ์แจก<br>ในห้องเรียนได้เลย
+      </div>
+    </div>
+
     <div class="footer">ใบงานนักสำรวจ · โรงไฟฟ้านิวเคลียร์ AR Workshop</div>
   </div>
 
@@ -184,6 +193,14 @@
       correctLevel: QRCode.CorrectLevel.H
     });
     document.getElementById('urlText').textContent = arUrl;
+
+    // QR ชุดใบงาน PDF (หน้า pdf.html เด้งดาวน์โหลดเอง)
+    new QRCode(document.getElementById('pdfQr'), {
+      text: new URL('pdf.html', window.location.href).href,
+      width: 84,
+      height: 84,
+      correctLevel: QRCode.CorrectLevel.M
+    });
   </script>
 </body>
 </html>

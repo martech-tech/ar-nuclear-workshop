@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>คู่มือผู้จัด Workshop — โรงไฟฟ้านิวเคลียร์ AR</title>
+  <script src="libs/qrcode.min.js"></script>
   <style>
     body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #e9edf2; color: #223; }
     .toolbar { text-align: center; padding: 14px; background: #0b2447; color: #fff; }
@@ -45,6 +46,7 @@
   <div class="toolbar">
     <button onclick="window.print()">🖨️ พิมพ์คู่มือ</button>
     <a href="print.html">🖨️ แผ่นมาร์กเกอร์+ใบงาน</a>
+    <a href="pdf.html">📄 ใบงาน PDF</a>
     <a href="index.html">📷 หน้า AR</a>
     <a href="viewer.html">🖥️ โหมด 3D</a>
   </div>
@@ -56,6 +58,13 @@
     </div>
     <h1>📋 คู่มือผู้จัดกิจกรรม — โรงไฟฟ้านิวเคลียร์ AR</h1>
     <p class="sub">Workshop วิทยาศาสตร์ เรื่องพลังงานสะอาด · เวลา 45–60 นาที · เหมาะกับ ป.4 – ม.3 · กลุ่มละ 2–4 คนต่อมือถือ 1 เครื่อง</p>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:5mm; margin:0 0 5mm;">
+      <div id="pdfQr" style="padding:2mm; border:2px dashed #19376d; border-radius:6px;"></div>
+      <div style="font-size:.88rem; color:#445; line-height:1.6;">
+        <b>📄 สแกนรับชุดใบงาน + เฉลย (PDF)</b><br>ดาวน์โหลดอัตโนมัติ · แจกครู/ผู้ปกครองต่อได้เลย
+      </div>
+    </div>
 
     <h2>🎯 วัตถุประสงค์การเรียนรู้</h2>
     <ul class="goal">
@@ -136,5 +145,11 @@
     </ul>
     <div class="tip">🔒 <b>ความเป็นส่วนตัวเด็ก (PDPA):</b> รูปทั้งหมดสร้างในเครื่องมือถือ ไม่ถูกส่งขึ้นเซิร์ฟเวอร์ของเรา และมีข้อความเตือนให้ขออนุญาตผู้ปกครองก่อนแชร์ — ควรแจ้งผู้ปกครองให้ชัดเจนหน้างานด้วย</div>
   </div>
+  <script>
+    new QRCode(document.getElementById('pdfQr'), {
+      text: new URL('pdf.html', window.location.href).href,
+      width: 84, height: 84, correctLevel: QRCode.CorrectLevel.M
+    });
+  </script>
 </body>
 </html>

@@ -292,6 +292,13 @@ a-scene canvas {
 .stationCard.soon .stIcon { filter: grayscale(.55); }
 .stationCard.soon .stBadge { color: #8a94a0; }
 #passportPanel .ppNote { font-size: .82rem; color: #667; text-align: center; line-height: 1.6; margin: 14px 0 12px; }
+.ppQrRow {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: #f4f7fb; border-radius: 14px; padding: 10px; margin-bottom: 10px;
+}
+#passportQR { background: #fff; padding: 6px; border-radius: 8px; line-height: 0; }
+#passportQR img, #passportQR canvas { display: block; }
+.ppQrCap { font-size: .78rem; color: #445; line-height: 1.55; text-align: left; }
 
 /* คำใบ้ "แตะอาคารได้นะ" */
 #tapHint {
